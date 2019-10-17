@@ -5,26 +5,32 @@ import { Resource } from 'src/Modules/Resource';
 
 // Types
 import { RedirectFlow } from 'src/Modules/Methods/RedirectFlows';
-export interface RedirectFlowsCreateParameters
+interface Parameters
+{
+	sessionToken: string;
+	successRedirectUrl: string;
+	description: string;
+};
+interface ApiParameters
 {
 	session_token: string;
 	success_redirect_url: string;
 	description: string;
 };
-export interface RedirectFlowsCreateResult
+interface Result
 {
 	redirect_flows: RedirectFlow;
 };
 
-export async function create(this: Resource, {session_token, success_redirect_url, description}: RedirectFlowsCreateParameters)
+export async function create(this: Resource, {sessionToken, successRedirectUrl, description}: Parameters)
 {
-	const body: RedirectFlowsCreateParameters =
+	const body: ApiParameters =
 	{
-		session_token,
-		success_redirect_url,
+		session_token: sessionToken,
+		success_redirect_url: successRedirectUrl,
 		description
 	};
-	const result = await this._client.domain.request <RedirectFlowsCreateResult>
+	const result = await this._client.domain.request <Result>
 	(
 		{
 			method: 'POST',
