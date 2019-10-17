@@ -19,7 +19,7 @@
 		"strictNullChecks": true,
 		"paths":
 		{
-			"/": "./"
+			"/": ["./"]
 		},
 		"watch": true
 	},
