@@ -122,6 +122,30 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 
 /***/ }),
 
+/***/ "./src/Modules/Methods/RedirectFlows/Actions/Complete.ts":
+/*!***************************************************************!*\
+  !*** ./src/Modules/Methods/RedirectFlows/Actions/Complete.ts ***!
+  \***************************************************************/
+/*! exports provided: complete */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"complete\", function() { return complete; });\n\r\n;\r\n;\r\n;\r\nasync function complete({ redirectFlowId, session_token }) {\r\n    const body = {\r\n        session_token\r\n    };\r\n    const result = await this._client.domain.request({\r\n        method: 'POST',\r\n        path: '/redirect_flows/' + redirectFlowId + '/actions/complete',\r\n        body,\r\n        jsonResponseSuccess: true,\r\n        jsonResponseError: true\r\n    });\r\n    if (result.json === undefined)\r\n        throw new Error('JSON undefined');\r\n    return result.json;\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Methods/RedirectFlows/Actions/Complete.ts?");
+
+/***/ }),
+
+/***/ "./src/Modules/Methods/RedirectFlows/Actions/index.ts":
+/*!************************************************************!*\
+  !*** ./src/Modules/Methods/RedirectFlows/Actions/index.ts ***!
+  \************************************************************/
+/*! exports provided: Actions */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"Actions\", function() { return Actions; });\n/* harmony import */ var src_Modules_Resource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! src/Modules/Resource */ \"./src/Modules/Resource.ts\");\n/* harmony import */ var _Complete__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Complete */ \"./src/Modules/Methods/RedirectFlows/Actions/Complete.ts\");\n\r\n\r\n\r\n;\r\nclass Actions extends src_Modules_Resource__WEBPACK_IMPORTED_MODULE_0__[\"Resource\"] {\r\n    constructor() {\r\n        super(...arguments);\r\n        this.complete = _Complete__WEBPACK_IMPORTED_MODULE_1__[\"complete\"];\r\n    }\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Methods/RedirectFlows/Actions/index.ts?");
+
+/***/ }),
+
 /***/ "./src/Modules/Methods/RedirectFlows/Create.ts":
 /*!*****************************************************!*\
   !*** ./src/Modules/Methods/RedirectFlows/Create.ts ***!
@@ -130,7 +154,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"create\", function() { return create; });\n\r\n;\r\n;\r\nasync function create({ session_token, success_redirect_url, description }) {\r\n    const body = {\r\n        session_token,\r\n        success_redirect_url,\r\n        description\r\n    };\r\n    const result = await this._client.domain.request({\r\n        method: 'POST',\r\n        path: '/redirect_flows',\r\n        body,\r\n        jsonResponseSuccess: true,\r\n        jsonResponseError: true\r\n    });\r\n    if (result.json === undefined)\r\n        throw new Error('JSON undefined');\r\n    return result.json;\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Methods/RedirectFlows/Create.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"create\", function() { return create; });\n\r\n;\r\n;\r\n;\r\nasync function create({ sessionToken, successRedirectUrl, description }) {\r\n    const body = {\r\n        session_token: sessionToken,\r\n        success_redirect_url: successRedirectUrl,\r\n        description\r\n    };\r\n    const result = await this._client.domain.request({\r\n        method: 'POST',\r\n        path: '/redirect_flows',\r\n        body,\r\n        jsonResponseSuccess: true,\r\n        jsonResponseError: true\r\n    });\r\n    if (result.json === undefined)\r\n        throw new Error('JSON undefined');\r\n    return result.json;\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Methods/RedirectFlows/Create.ts?");
 
 /***/ }),
 
@@ -142,7 +166,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"RedirectFlows\", function() { return RedirectFlows; });\n/* harmony import */ var src_Modules_Resource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! src/Modules/Resource */ \"./src/Modules/Resource.ts\");\n/* harmony import */ var _Create__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Create */ \"./src/Modules/Methods/RedirectFlows/Create.ts\");\n\r\n\r\n\r\n;\r\nclass RedirectFlows extends src_Modules_Resource__WEBPACK_IMPORTED_MODULE_0__[\"Resource\"] {\r\n    constructor() {\r\n        super(...arguments);\r\n        this.create = _Create__WEBPACK_IMPORTED_MODULE_1__[\"create\"];\r\n    }\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Methods/RedirectFlows/index.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"RedirectFlows\", function() { return RedirectFlows; });\n/* harmony import */ var src_Modules_Resource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! src/Modules/Resource */ \"./src/Modules/Resource.ts\");\n/* harmony import */ var _Create__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Create */ \"./src/Modules/Methods/RedirectFlows/Create.ts\");\n/* harmony import */ var _Actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Actions */ \"./src/Modules/Methods/RedirectFlows/Actions/index.ts\");\n\r\n\r\n\r\n\r\n;\r\nclass RedirectFlows extends src_Modules_Resource__WEBPACK_IMPORTED_MODULE_0__[\"Resource\"] {\r\n    constructor({ client }) {\r\n        super({ client });\r\n        this.create = _Create__WEBPACK_IMPORTED_MODULE_1__[\"create\"];\r\n        this.actions = new _Actions__WEBPACK_IMPORTED_MODULE_2__[\"Actions\"]({ client });\r\n    }\r\n    ;\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Methods/RedirectFlows/index.ts?");
 
 /***/ }),
 
