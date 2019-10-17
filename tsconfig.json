@@ -1,0 +1,30 @@
+{
+	"compilerOptions":
+	{
+		"target": "es2017",
+		"module": "ES6",
+		"moduleResolution": "node",
+		"baseUrl": "./",
+		"outDir": "./build/",
+		"lib":
+		[
+			"es2017"
+		],
+		"removeComments": true,
+		"downlevelIteration": true,
+		"alwaysStrict": true,
+		"allowJs": true,
+		"resolveJsonModule": true,
+		"allowSyntheticDefaultImports": true,
+		"strictNullChecks": true,
+		"paths":
+		{
+			"/": "./"
+		},
+		"watch": true
+	},
+	"include":
+	[
+		"src/**/*"
+	]
+}
