@@ -5,6 +5,7 @@ import { Resource } from 'src/Modules/Resource';
 
 // Types
 import { Metadata } from 'src/Modules/index';
+import { Payment} from 'src/Modules/Methods/Payments';
 export interface PaymentsCreateParameters
 {
 	amount: number;
@@ -25,19 +26,7 @@ export interface PaymentsCreateApiParametersLinks
 };
 export interface PaymentsCreateResult
 {
-	payments: PaymentsCreateResultPayments;
-};
-export interface PaymentsCreateResultPayments
-{
-	id: string;
-	created_at: string;
-	charge_date: string;
-	amount: number;
-	currency: string;
-	status: string;
-	reference: string;
-	metadata: Metadata;
-	amount_refunded: number;
+	payments: Payment;
 };
 
 export async function create(this: Resource, {amount, currency, metadata, mandate}: PaymentsCreateParameters)
