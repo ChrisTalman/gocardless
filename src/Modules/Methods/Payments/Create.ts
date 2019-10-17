@@ -6,32 +6,32 @@ import { Resource } from 'src/Modules/Resource';
 // Types
 import { Metadata } from 'src/Modules/index';
 import { Payment} from 'src/Modules/Methods/Payments';
-export interface PaymentsCreateParameters
+interface Parameters
 {
 	amount: number;
 	currency: string;
 	metadata?: Metadata;
 	mandate: string;
 };
-export interface PaymentsCreateApiParameters
+interface ApiParameters
 {
 	amount: number;
 	currency: string;
 	metadata?: Metadata;
-	links: PaymentsCreateApiParametersLinks;
+	links: ApiParametersLinks;
 };
-export interface PaymentsCreateApiParametersLinks
+interface ApiParametersLinks
 {
 	mandate: string;
 };
-export interface PaymentsCreateResult
+interface Result
 {
 	payments: Payment;
 };
 
-export async function create(this: Resource, {amount, currency, metadata, mandate}: PaymentsCreateParameters)
+export async function create(this: Resource, {amount, currency, metadata, mandate}: Parameters)
 {
-	const body: PaymentsCreateApiParameters =
+	const body: ApiParameters =
 	{
 		amount,
 		currency,
@@ -41,7 +41,7 @@ export async function create(this: Resource, {amount, currency, metadata, mandat
 			mandate
 		}
 	};
-	const result = await this._client.domain.request <PaymentsCreateResult>
+	const result = await this._client.domain.request <Result>
 	(
 		{
 			method: 'POST',
