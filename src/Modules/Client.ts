@@ -5,6 +5,7 @@ import { Domain } from '@ChrisTalman/request';
 
 // Internal Modules
 import { Payments } from './Methods/Payments';
+import { RedirectFlows } from './Methods/RedirectFlows';
 
 export class Client
 {
@@ -31,4 +32,6 @@ export class Client
 		);
 	};
 	public payments = new Payments({client: this});
+	public redirectFlows = new RedirectFlows({client: this});
 };
+// DEBUG

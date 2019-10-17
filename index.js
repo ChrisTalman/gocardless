@@ -94,7 +94,7 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"Client\", function() { return Client; });\n/* harmony import */ var _ChrisTalman_request__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ChrisTalman/request */ \"@ChrisTalman/request\");\n/* harmony import */ var _ChrisTalman_request__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_ChrisTalman_request__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _Methods_Payments__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Methods/Payments */ \"./src/Modules/Methods/Payments/index.ts\");\n\r\n\r\n\r\nclass Client {\r\n    constructor({ baseSubdomain, accessToken, version }) {\r\n        this.payments = new _Methods_Payments__WEBPACK_IMPORTED_MODULE_1__[\"Payments\"]({ client: this });\r\n        this.baseSubdomain = baseSubdomain;\r\n        this.accessToken = accessToken;\r\n        this.version = version;\r\n        const url = 'https://' + this.baseSubdomain + '.gocardless.com';\r\n        this.domain = new _ChrisTalman_request__WEBPACK_IMPORTED_MODULE_0__[\"Domain\"]({\r\n            path: url,\r\n            auth: () => 'Bearer ' + accessToken,\r\n            headers: {\r\n                'GoCardless-Version': version\r\n            }\r\n        });\r\n    }\r\n    ;\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Client.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"Client\", function() { return Client; });\n/* harmony import */ var _ChrisTalman_request__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ChrisTalman/request */ \"@ChrisTalman/request\");\n/* harmony import */ var _ChrisTalman_request__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_ChrisTalman_request__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _Methods_Payments__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Methods/Payments */ \"./src/Modules/Methods/Payments/index.ts\");\n/* harmony import */ var _Methods_RedirectFlows__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Methods/RedirectFlows */ \"./src/Modules/Methods/RedirectFlows/index.ts\");\n\r\n\r\n\r\n\r\nclass Client {\r\n    constructor({ baseSubdomain, accessToken, version }) {\r\n        this.payments = new _Methods_Payments__WEBPACK_IMPORTED_MODULE_1__[\"Payments\"]({ client: this });\r\n        this.redirectFlows = new _Methods_RedirectFlows__WEBPACK_IMPORTED_MODULE_2__[\"RedirectFlows\"]({ client: this });\r\n        this.baseSubdomain = baseSubdomain;\r\n        this.accessToken = accessToken;\r\n        this.version = version;\r\n        const url = 'https://' + this.baseSubdomain + '.gocardless.com';\r\n        this.domain = new _ChrisTalman_request__WEBPACK_IMPORTED_MODULE_0__[\"Domain\"]({\r\n            path: url,\r\n            auth: () => 'Bearer ' + accessToken,\r\n            headers: {\r\n                'GoCardless-Version': version\r\n            }\r\n        });\r\n    }\r\n    ;\r\n}\r\n;\r\nconst client = new Client({ baseSubdomain: 'api-sandbox', accessToken: '123', version: 'abc' });\r\nconsole.log('Client:', client);\r\n\n\n//# sourceURL=webpack:///./src/Modules/Client.ts?");
 
 /***/ }),
 
@@ -106,7 +106,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"create\", function() { return create; });\n\r\n;\r\n;\r\n;\r\n;\r\n;\r\nasync function create({ amount, currency, metadata, mandate }) {\r\n    const body = {\r\n        amount,\r\n        currency,\r\n        metadata,\r\n        links: {\r\n            mandate\r\n        }\r\n    };\r\n    const result = await this._client.domain.request({\r\n        method: 'POST',\r\n        path: '/payments',\r\n        body,\r\n        jsonResponseSuccess: true,\r\n        jsonResponseError: true\r\n    });\r\n    if (result.json === undefined)\r\n        throw new Error('JSON undefined');\r\n    return result.json;\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Methods/Payments/Create.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"create\", function() { return create; });\n\r\n;\r\n;\r\n;\r\n;\r\nasync function create({ amount, currency, metadata, mandate }) {\r\n    const body = {\r\n        amount,\r\n        currency,\r\n        metadata,\r\n        links: {\r\n            mandate\r\n        }\r\n    };\r\n    const result = await this._client.domain.request({\r\n        method: 'POST',\r\n        path: '/payments',\r\n        body,\r\n        jsonResponseSuccess: true,\r\n        jsonResponseError: true\r\n    });\r\n    if (result.json === undefined)\r\n        throw new Error('JSON undefined');\r\n    return result.json;\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Methods/Payments/Create.ts?");
 
 /***/ }),
 
@@ -118,7 +118,31 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"Payments\", function() { return Payments; });\n/* harmony import */ var src_Modules_Resource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! src/Modules/Resource */ \"./src/Modules/Resource.ts\");\n/* harmony import */ var _Create__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Create */ \"./src/Modules/Methods/Payments/Create.ts\");\n\r\n\r\n\r\nclass Payments extends src_Modules_Resource__WEBPACK_IMPORTED_MODULE_0__[\"Resource\"] {\r\n    constructor() {\r\n        super(...arguments);\r\n        this.create = _Create__WEBPACK_IMPORTED_MODULE_1__[\"create\"];\r\n    }\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Methods/Payments/index.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"Payments\", function() { return Payments; });\n/* harmony import */ var src_Modules_Resource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! src/Modules/Resource */ \"./src/Modules/Resource.ts\");\n/* harmony import */ var _Create__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Create */ \"./src/Modules/Methods/Payments/Create.ts\");\n\r\n\r\n\r\n;\r\nclass Payments extends src_Modules_Resource__WEBPACK_IMPORTED_MODULE_0__[\"Resource\"] {\r\n    constructor() {\r\n        super(...arguments);\r\n        this.create = _Create__WEBPACK_IMPORTED_MODULE_1__[\"create\"];\r\n    }\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Methods/Payments/index.ts?");
+
+/***/ }),
+
+/***/ "./src/Modules/Methods/RedirectFlows/Create.ts":
+/*!*****************************************************!*\
+  !*** ./src/Modules/Methods/RedirectFlows/Create.ts ***!
+  \*****************************************************/
+/*! exports provided: create */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"create\", function() { return create; });\n\r\n;\r\n;\r\nasync function create({ session_token, success_redirect_url, description }) {\r\n    const body = {\r\n        session_token,\r\n        success_redirect_url,\r\n        description\r\n    };\r\n    const result = await this._client.domain.request({\r\n        method: 'POST',\r\n        path: '/redirect_flows',\r\n        body,\r\n        jsonResponseSuccess: true,\r\n        jsonResponseError: true\r\n    });\r\n    if (result.json === undefined)\r\n        throw new Error('JSON undefined');\r\n    return result.json;\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Methods/RedirectFlows/Create.ts?");
+
+/***/ }),
+
+/***/ "./src/Modules/Methods/RedirectFlows/index.ts":
+/*!****************************************************!*\
+  !*** ./src/Modules/Methods/RedirectFlows/index.ts ***!
+  \****************************************************/
+/*! exports provided: RedirectFlows */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"RedirectFlows\", function() { return RedirectFlows; });\n/* harmony import */ var src_Modules_Resource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! src/Modules/Resource */ \"./src/Modules/Resource.ts\");\n/* harmony import */ var _Create__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Create */ \"./src/Modules/Methods/RedirectFlows/Create.ts\");\n\r\n\r\n\r\n;\r\nclass RedirectFlows extends src_Modules_Resource__WEBPACK_IMPORTED_MODULE_0__[\"Resource\"] {\r\n    constructor() {\r\n        super(...arguments);\r\n        this.create = _Create__WEBPACK_IMPORTED_MODULE_1__[\"create\"];\r\n    }\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Methods/RedirectFlows/index.ts?");
 
 /***/ }),
 
