@@ -34,4 +34,3 @@ export class Client
 	public payments = new Payments({client: this});
 	public redirectFlows = new RedirectFlows({client: this});
 };
-// DEBUG
