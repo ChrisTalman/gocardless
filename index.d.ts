@@ -29,17 +29,13 @@ declare module '@ChrisTalman/gocardless'
 		amount: number;
 		currency: string;
 		metadata: Metadata;
-		links: PaymentsCreateParametersLinks;
-	}
-	export interface PaymentsCreateParametersLinks
-	{
 		mandate: string;
 	}
 	export interface PaymentsCreateResult
 	{
-		payments: PaymentsCreateResultPayments;
+		payments: Payment;
 	}
-	export interface PaymentsCreateResultPayments
+	export interface Payment
 	{
 		id: string;
 		created_at: string;
@@ -50,6 +46,51 @@ declare module '@ChrisTalman/gocardless'
 		reference: string;
 		metadata: Metadata;
 		amount_refunded: number;
+	}
+	// Redirect Flows
+	export class RedirectFlows extends Resource
+	{
+		public create(parameters: RedirectFlowsCreateParameters): Promise<RedirectFlowsCreateResult>;
+		public actions: Actions;
+	}
+	// Redirect Flows: Create
+	export interface RedirectFlowsCreateParameters
+	{
+		sessionToken: string;
+		successRedirectUrl: string;
+		description: string;
+	}
+	export interface RedirectFlowsCreateResult
+	{
+		payments: RedirectFlow;
+	}
+	export interface RedirectFlow
+	{
+		id: string;
+		created_at: string;
+		charge_date: string;
+		amount: number;
+		currency: string;
+		status: string;
+		reference: string;
+		metadata: Metadata;
+		amount_refunded: number;
+	}
+	// Redirect Flows: Actions
+	export class Actions extends Resource
+	{
+		public complete(parameters: RedirectFlowsActionsCompleteParameters): Promise<RedirectFlowsActionsCompleteResult>;
+	}
+	// Redirect Flows: Actions: Create
+	export interface RedirectFlowsActionsCompleteParameters
+	{
+		sessionToken: string;
+		successRedirectUrl: string;
+		description: string;
+	}
+	export interface RedirectFlowsActionsCompleteResult
+	{
+		payments: RedirectFlow;
 	}
 	// Metadata
 	interface Metadata
