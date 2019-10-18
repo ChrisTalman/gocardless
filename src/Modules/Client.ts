@@ -9,16 +9,16 @@ import { RedirectFlows } from './Methods/RedirectFlows';
 
 export class Client
 {
-	public readonly baseSubdomain: 'api' | 'api-sandbox';
+	public readonly subdomain: 'api' | 'api-sandbox';
 	public readonly accessToken: string;
 	public readonly version: string;
 	public readonly domain: Domain;
-	constructor({baseSubdomain, accessToken, version}: {baseSubdomain: Client['baseSubdomain'], accessToken: Client['accessToken'], version: Client['version']})
+	constructor({subdomain, accessToken, version}: {subdomain: Client['subdomain'], accessToken: Client['accessToken'], version: Client['version']})
 	{
-		this.baseSubdomain = baseSubdomain;
+		this.subdomain = subdomain;
 		this.accessToken = accessToken;
 		this.version = version;
-		const url = 'https://' + this.baseSubdomain + '.gocardless.com';
+		const url = 'https://' + this.subdomain + '.gocardless.com';
 		this.domain = new Domain
 		(
 			{

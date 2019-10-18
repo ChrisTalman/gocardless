@@ -6,11 +6,11 @@ declare module '@ChrisTalman/gocardless'
 	// Client
 	export class Client
 	{
-		public readonly baseSubdomain: 'api' | 'api-sandbox';
+		public readonly subdomain: 'api' | 'api-sandbox';
 		public readonly accessToken: string;
 		public readonly version: string;
 		public readonly domain: Domain;
-		constructor({baseSubdomain, accessToken, version}: {baseSubdomain: Client['baseSubdomain'], accessToken: Client['accessToken'], version: Client['version']});
+		constructor({subdomain, accessToken, version}: {subdomain: Client['subdomain'], accessToken: Client['accessToken'], version: Client['version']});
 	}
 	// Resource
 	class Resource
