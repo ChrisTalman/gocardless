@@ -52,7 +52,14 @@ export async function throwRejectionApiError <GenericResolution> (promise: Promi
 export function throwApiError(error: any)
 {
 	const apiError: RequestJsonError <ApiErrorPayload> = error;
-	if (apiError instanceof RequestJsonError && typeof apiError.json.code === 'string')
+	if
+	(
+		apiError instanceof RequestJsonError &&
+		typeof apiError.json.type === 'string' &&
+		typeof apiError.json.code === 'number' &&
+		typeof apiError.json.documentation_url === 'string' &&
+		typeof apiError.json.request_id === 'string'
+	)
 	{
 		throw new ApiError({error: apiError});
 	}
