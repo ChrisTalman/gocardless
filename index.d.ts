@@ -64,7 +64,7 @@ declare module '@ChrisTalman/gocardless'
 	}
 	export interface RedirectFlowsCreateResult
 	{
-		payments: RedirectFlow;
+		redirect_flows: RedirectFlow;
 	}
 	export interface RedirectFlow
 	{
