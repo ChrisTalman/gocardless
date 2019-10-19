@@ -92,7 +92,7 @@ declare module '@ChrisTalman/gocardless'
 	}
 	export interface RedirectFlowsActionsCompleteResult
 	{
-		payments: RedirectFlow;
+		redirect_flows: RedirectFlow;
 	}
 	// Metadata
 	interface Metadata
