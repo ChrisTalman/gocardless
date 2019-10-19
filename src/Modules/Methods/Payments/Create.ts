@@ -2,7 +2,7 @@
 
 // Internal Modules
 import { Resource } from 'src/Modules/Resource';
-import { throwRejectionApiError } from 'src/Modules/Error';
+import { throwRejectionApiError } from 'src/Modules/ApiError';
 
 // Types
 import { Metadata } from 'src/Modules/index';

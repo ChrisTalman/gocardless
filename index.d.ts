@@ -1,5 +1,5 @@
 // External Modules
-import { Domain } from '@ChrisTalman/request';
+import { Domain, RequestJsonError } from '@ChrisTalman/request';
 
 declare module '@ChrisTalman/gocardless'
 {
@@ -86,5 +86,43 @@ declare module '@ChrisTalman/gocardless'
 	interface Metadata
 	{
 		[key: string]: string;
+	}
+	// API Error
+	export class ApiError extends Error
+	{
+		public readonly type: string;
+		public readonly code: number;
+		public readonly message: string;
+		public readonly documentationUrl: string;
+		public readonly requestId: string;
+		public readonly errors: ApiErrorPayloadErrorErrors;
+		public readonly error: RequestJsonError <ApiErrorPayload>;
+		constructor({error}: {error: RequestJsonError <ApiErrorPayload>});
+	}
+	interface ApiErrorPayload
+	{
+		error: ApiErrorPayloadError;
+	}
+	interface ApiErrorPayloadError
+	{
+		type: string;
+		code: number;
+		errors: ApiErrorPayloadErrorErrors;
+		message: string;
+		documentation_url: string;
+		request_id: string;
+	}
+	interface ApiErrorPayloadErrorErrors extends Array<ApiErrorPayloadErrorErrorsError> {}
+	type ApiErrorPayloadErrorErrorsError = ApiErrorPayloadErrorErrorsErrorStandard | ApiErrorPayloadErrorErrorsErrorValidation;
+	interface ApiErrorPayloadErrorErrorsErrorStandard
+	{
+		message: string;
+		field: string;
+		request_pointer: string;
+	}
+	interface ApiErrorPayloadErrorErrorsErrorValidation
+	{
+		message: string;
+		reason: string;
 	}
 }
