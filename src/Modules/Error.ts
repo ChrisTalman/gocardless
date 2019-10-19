@@ -6,11 +6,29 @@ import { RequestJsonError } from '@ChrisTalman/request';
 // Types
 interface ApiErrorPayload
 {
+	error: ApiErrorPayloadError;
+};
+interface ApiErrorPayloadError
+{
 	type: string;
 	code: number;
+	errors: ApiErrorPayloadErrorErrors;
 	message: string;
 	documentation_url: string;
 	request_id: string;
+};
+interface ApiErrorPayloadErrorErrors extends Array<ApiErrorPayloadErrorErrorsError> {};
+type ApiErrorPayloadErrorErrorsError = ApiErrorPayloadErrorErrorsErrorStandard | ApiErrorPayloadErrorErrorsErrorValidation;
+interface ApiErrorPayloadErrorErrorsErrorStandard
+{
+	message: string;
+	field: string;
+	request_pointer: string;
+};
+interface ApiErrorPayloadErrorErrorsErrorValidation
+{
+	message: string;
+	reason: string;
 };
 
 export class ApiError extends Error
@@ -20,15 +38,17 @@ export class ApiError extends Error
 	public readonly message: string;
 	public readonly documentationUrl: string;
 	public readonly requestId: string;
+	public readonly errors: ApiErrorPayloadErrorErrors;
 	public readonly error: RequestJsonError <ApiErrorPayload>;
 	constructor({error}: {error: RequestJsonError <ApiErrorPayload>})
 	{
-		const formattedMessage = 'GoCardless Error: ' + error.json.message;
+		const formattedMessage = 'GoCardless Error: ' + error.json.error.message;
 		super(formattedMessage);
-		this.type = error.json.type;
-		this.code = error.json.code;
-		this.documentationUrl = error.json.documentation_url;
-		this.requestId = error.json.request_id;
+		this.type = error.json.error.type;
+		this.code = error.json.error.code;
+		this.documentationUrl = error.json.error.documentation_url;
+		this.requestId = error.json.error.request_id;
+		this.errors = error.json.error.errors;
 		this.error = error;
 	};
 };
@@ -55,10 +75,12 @@ export function throwApiError(error: any)
 	if
 	(
 		apiError instanceof RequestJsonError &&
-		typeof apiError.json.type === 'string' &&
-		typeof apiError.json.code === 'number' &&
-		typeof apiError.json.documentation_url === 'string' &&
-		typeof apiError.json.request_id === 'string'
+		typeof apiError.json.error.message === 'string' &&
+		typeof apiError.json.error.type === 'string' &&
+		typeof apiError.json.error.code === 'number' &&
+		typeof apiError.json.error.documentation_url === 'string' &&
+		typeof apiError.json.error.request_id === 'string' &&
+		Array.isArray(apiError.json.error.errors)
 	)
 	{
 		throw new ApiError({error: apiError});
