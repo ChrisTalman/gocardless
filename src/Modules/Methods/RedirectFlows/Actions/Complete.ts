@@ -13,7 +13,10 @@ interface Parameters
 };
 interface ApiParameters
 {
-	session_token: string;
+	data:
+	{
+		session_token: string;
+	};
 };
 interface Result
 {
@@ -24,7 +27,10 @@ export async function complete(this: Resource, {redirectFlowId, session_token}: 
 {
 	const body: ApiParameters =
 	{
-		session_token
+		data:
+		{
+			session_token
+		}
 	};
 	const result = await throwRejectionApiError
 	(

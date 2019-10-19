@@ -16,10 +16,13 @@ interface Parameters
 };
 interface ApiParameters
 {
-	amount: number;
-	currency: string;
-	metadata?: Metadata;
-	links: ApiParametersLinks;
+	payments:
+	{
+		amount: number;
+		currency: string;
+		metadata?: Metadata;
+		links: ApiParametersLinks;
+	};
 };
 interface ApiParametersLinks
 {
@@ -34,12 +37,15 @@ export async function create(this: Resource, {amount, currency, metadata, mandat
 {
 	const body: ApiParameters =
 	{
-		amount,
-		currency,
-		metadata,
-		links:
+		payments:
 		{
-			mandate
+			amount,
+			currency,
+			metadata,
+			links:
+			{
+				mandate
+			}
 		}
 	};
 	const result = await throwRejectionApiError

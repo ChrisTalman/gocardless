@@ -14,9 +14,12 @@ interface Parameters
 };
 interface ApiParameters
 {
-	session_token: string;
-	success_redirect_url: string;
-	description: string;
+	redirect_flows:
+	{
+		session_token: string;
+		success_redirect_url: string;
+		description: string;
+	};
 };
 interface Result
 {
@@ -27,9 +30,12 @@ export async function create(this: Resource, {sessionToken, successRedirectUrl, 
 {
 	const body: ApiParameters =
 	{
-		session_token: sessionToken,
-		success_redirect_url: successRedirectUrl,
-		description
+		redirect_flows:
+		{
+			session_token: sessionToken,
+			success_redirect_url: successRedirectUrl,
+			description
+		}
 	};
 	const result = await throwRejectionApiError
 	(
