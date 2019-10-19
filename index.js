@@ -108,6 +108,18 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 
 /***/ }),
 
+/***/ "./src/Modules/Error.ts":
+/*!******************************!*\
+  !*** ./src/Modules/Error.ts ***!
+  \******************************/
+/*! exports provided: ApiError, throwRejectionApiError, throwApiError */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"ApiError\", function() { return ApiError; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"throwRejectionApiError\", function() { return throwRejectionApiError; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"throwApiError\", function() { return throwApiError; });\n/* harmony import */ var _ChrisTalman_request__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ChrisTalman/request */ \"@ChrisTalman/request\");\n/* harmony import */ var _ChrisTalman_request__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_ChrisTalman_request__WEBPACK_IMPORTED_MODULE_0__);\n\r\n\r\n;\r\nclass ApiError extends Error {\r\n    constructor({ error }) {\r\n        const formattedMessage = 'GoCardless Error: ' + error.json.message;\r\n        super(formattedMessage);\r\n        this.type = error.json.type;\r\n        this.code = error.json.code;\r\n        this.documentationUrl = error.json.documentation_url;\r\n        this.requestId = error.json.request_id;\r\n        this.error = error;\r\n    }\r\n    ;\r\n}\r\n;\r\nasync function throwRejectionApiError(promise) {\r\n    let result;\r\n    try {\r\n        result = await promise;\r\n    }\r\n    catch (error) {\r\n        throwApiError(error);\r\n        throw new Error('throwApiError() failed');\r\n    }\r\n    ;\r\n    return result;\r\n}\r\n;\r\nfunction throwApiError(error) {\r\n    const apiError = error;\r\n    if (apiError instanceof _ChrisTalman_request__WEBPACK_IMPORTED_MODULE_0__[\"RequestJsonError\"] && typeof apiError.json.code === 'string') {\r\n        throw new ApiError({ error: apiError });\r\n    }\r\n    else {\r\n        throw error;\r\n    }\r\n    ;\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Error.ts?");
+
+/***/ }),
+
 /***/ "./src/Modules/Methods/Payments/Create.ts":
 /*!************************************************!*\
   !*** ./src/Modules/Methods/Payments/Create.ts ***!
@@ -116,7 +128,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"create\", function() { return create; });\n\r\n;\r\n;\r\n;\r\n;\r\nasync function create({ amount, currency, metadata, mandate }) {\r\n    const body = {\r\n        amount,\r\n        currency,\r\n        metadata,\r\n        links: {\r\n            mandate\r\n        }\r\n    };\r\n    const result = await this._client.domain.request({\r\n        method: 'POST',\r\n        path: '/payments',\r\n        body,\r\n        jsonResponseSuccess: true,\r\n        jsonResponseError: true\r\n    });\r\n    if (result.json === undefined)\r\n        throw new Error('JSON undefined');\r\n    return result.json;\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Methods/Payments/Create.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"create\", function() { return create; });\n/* harmony import */ var src_Modules_Error__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! src/Modules/Error */ \"./src/Modules/Error.ts\");\n\r\n\r\n;\r\n;\r\n;\r\n;\r\nasync function create({ amount, currency, metadata, mandate }) {\r\n    const body = {\r\n        amount,\r\n        currency,\r\n        metadata,\r\n        links: {\r\n            mandate\r\n        }\r\n    };\r\n    const result = await Object(src_Modules_Error__WEBPACK_IMPORTED_MODULE_0__[\"throwRejectionApiError\"])(this._client.domain.request({\r\n        method: 'POST',\r\n        path: '/payments',\r\n        body,\r\n        jsonResponseSuccess: true,\r\n        jsonResponseError: true\r\n    }));\r\n    if (result.json === undefined)\r\n        throw new Error('JSON undefined');\r\n    const { payments: payment } = result.json;\r\n    return payment;\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Methods/Payments/Create.ts?");
 
 /***/ }),
 
@@ -140,7 +152,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"complete\", function() { return complete; });\n\r\n;\r\n;\r\n;\r\nasync function complete({ redirectFlowId, session_token }) {\r\n    const body = {\r\n        session_token\r\n    };\r\n    const result = await this._client.domain.request({\r\n        method: 'POST',\r\n        path: '/redirect_flows/' + redirectFlowId + '/actions/complete',\r\n        body,\r\n        jsonResponseSuccess: true,\r\n        jsonResponseError: true\r\n    });\r\n    if (result.json === undefined)\r\n        throw new Error('JSON undefined');\r\n    return result.json;\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Methods/RedirectFlows/Actions/Complete.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"complete\", function() { return complete; });\n/* harmony import */ var src_Modules_Error__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! src/Modules/Error */ \"./src/Modules/Error.ts\");\n\r\n\r\n;\r\n;\r\n;\r\nasync function complete({ redirectFlowId, session_token }) {\r\n    const body = {\r\n        session_token\r\n    };\r\n    const result = await Object(src_Modules_Error__WEBPACK_IMPORTED_MODULE_0__[\"throwRejectionApiError\"])(this._client.domain.request({\r\n        method: 'POST',\r\n        path: '/redirect_flows/' + redirectFlowId + '/actions/complete',\r\n        body,\r\n        jsonResponseSuccess: true,\r\n        jsonResponseError: true\r\n    }));\r\n    if (result.json === undefined)\r\n        throw new Error('JSON undefined');\r\n    const { redirect_flows: redirectFlow } = result.json;\r\n    return redirectFlow;\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Methods/RedirectFlows/Actions/Complete.ts?");
 
 /***/ }),
 
@@ -164,7 +176,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"create\", function() { return create; });\n\r\n;\r\n;\r\n;\r\nasync function create({ sessionToken, successRedirectUrl, description }) {\r\n    const body = {\r\n        session_token: sessionToken,\r\n        success_redirect_url: successRedirectUrl,\r\n        description\r\n    };\r\n    const result = await this._client.domain.request({\r\n        method: 'POST',\r\n        path: '/redirect_flows',\r\n        body,\r\n        jsonResponseSuccess: true,\r\n        jsonResponseError: true\r\n    });\r\n    if (result.json === undefined)\r\n        throw new Error('JSON undefined');\r\n    return result.json;\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Methods/RedirectFlows/Create.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"create\", function() { return create; });\n/* harmony import */ var src_Modules_Error__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! src/Modules/Error */ \"./src/Modules/Error.ts\");\n\r\n\r\n;\r\n;\r\n;\r\nasync function create({ sessionToken, successRedirectUrl, description }) {\r\n    const body = {\r\n        session_token: sessionToken,\r\n        success_redirect_url: successRedirectUrl,\r\n        description\r\n    };\r\n    const result = await Object(src_Modules_Error__WEBPACK_IMPORTED_MODULE_0__[\"throwRejectionApiError\"])(this._client.domain.request({\r\n        method: 'POST',\r\n        path: '/redirect_flows',\r\n        body,\r\n        jsonResponseSuccess: true,\r\n        jsonResponseError: true\r\n    }));\r\n    if (result.json === undefined)\r\n        throw new Error('JSON undefined');\r\n    const { redirect_flows: redirectFlow } = result.json;\r\n    return redirectFlow;\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Methods/RedirectFlows/Create.ts?");
 
 /***/ }),
 

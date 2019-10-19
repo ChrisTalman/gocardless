@@ -2,6 +2,7 @@
 
 // Internal Modules
 import { Resource } from 'src/Modules/Resource';
+import { throwRejectionApiError } from 'src/Modules/Error';
 
 // Types
 import { Metadata } from 'src/Modules/index';
@@ -41,16 +42,20 @@ export async function create(this: Resource, {amount, currency, metadata, mandat
 			mandate
 		}
 	};
-	const result = await this._client.domain.request <Result>
+	const result = await throwRejectionApiError
 	(
-		{
-			method: 'POST',
-			path: '/payments',
-			body,
-			jsonResponseSuccess: true,
-			jsonResponseError: true
-		}
+		this._client.domain.request <Result>
+		(
+			{
+				method: 'POST',
+				path: '/payments',
+				body,
+				jsonResponseSuccess: true,
+				jsonResponseError: true
+			}
+		)
 	);
 	if (result.json === undefined) throw new Error('JSON undefined');
-	return result.json;
+	const { payments: payment } = result.json;
+	return payment;
 };

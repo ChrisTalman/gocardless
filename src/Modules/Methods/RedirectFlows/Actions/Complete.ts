@@ -2,19 +2,20 @@
 
 // Internal Modules
 import { Resource } from 'src/Modules/Resource';
+import { throwRejectionApiError } from 'src/Modules/Error';
 
 // Types
 import { RedirectFlow } from 'src/Modules/Methods/RedirectFlows';
-export interface Parameters
+interface Parameters
 {
 	redirectFlowId: string;
 	session_token: string;
 };
-export interface ApiParameters
+interface ApiParameters
 {
 	session_token: string;
 };
-export interface Result
+interface Result
 {
 	redirect_flows: RedirectFlow;
 };
@@ -25,16 +26,20 @@ export async function complete(this: Resource, {redirectFlowId, session_token}: 
 	{
 		session_token
 	};
-	const result = await this._client.domain.request <Result>
+	const result = await throwRejectionApiError
 	(
-		{
-			method: 'POST',
-			path: '/redirect_flows/' + redirectFlowId + '/actions/complete',
-			body,
-			jsonResponseSuccess: true,
-			jsonResponseError: true
-		}
+		this._client.domain.request <Result>
+		(
+			{
+				method: 'POST',
+				path: '/redirect_flows/' + redirectFlowId + '/actions/complete',
+				body,
+				jsonResponseSuccess: true,
+				jsonResponseError: true
+			}
+		)
 	);
 	if (result.json === undefined) throw new Error('JSON undefined');
-	return result.json;
+	const { redirect_flows: redirectFlow } = result.json;
+	return redirectFlow;
 };

@@ -23,7 +23,7 @@ declare module '@ChrisTalman/gocardless'
 	// Payments
 	export class Payments extends Resource
 	{
-		public create(parameters: PaymentsCreateParameters): Promise<PaymentsCreateResult>;
+		public create(parameters: PaymentsCreateParameters): Promise<Payment>;
 	}
 	// Payments: Create
 	export interface PaymentsCreateParameters
@@ -32,10 +32,6 @@ declare module '@ChrisTalman/gocardless'
 		currency: string;
 		metadata: Metadata;
 		mandate: string;
-	}
-	export interface PaymentsCreateResult
-	{
-		payments: Payment;
 	}
 	export interface Payment
 	{
@@ -52,7 +48,7 @@ declare module '@ChrisTalman/gocardless'
 	// Redirect Flows
 	export class RedirectFlows extends Resource
 	{
-		public create(parameters: RedirectFlowsCreateParameters): Promise<RedirectFlowsCreateResult>;
+		public create(parameters: RedirectFlowsCreateParameters): Promise<RedirectFlow>;
 		public actions: Actions;
 	}
 	// Redirect Flows: Create
@@ -61,10 +57,6 @@ declare module '@ChrisTalman/gocardless'
 		sessionToken: string;
 		successRedirectUrl: string;
 		description: string;
-	}
-	export interface RedirectFlowsCreateResult
-	{
-		redirect_flows: RedirectFlow;
 	}
 	export interface RedirectFlow
 	{
@@ -81,7 +73,7 @@ declare module '@ChrisTalman/gocardless'
 	// Redirect Flows: Actions
 	export class Actions extends Resource
 	{
-		public complete(parameters: RedirectFlowsActionsCompleteParameters): Promise<RedirectFlowsActionsCompleteResult>;
+		public complete(parameters: RedirectFlowsActionsCompleteParameters): Promise<RedirectFlow>;
 	}
 	// Redirect Flows: Actions: Create
 	export interface RedirectFlowsActionsCompleteParameters
@@ -89,10 +81,6 @@ declare module '@ChrisTalman/gocardless'
 		sessionToken: string;
 		successRedirectUrl: string;
 		description: string;
-	}
-	export interface RedirectFlowsActionsCompleteResult
-	{
-		redirect_flows: RedirectFlow;
 	}
 	// Metadata
 	interface Metadata
