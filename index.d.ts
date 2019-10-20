@@ -83,7 +83,8 @@ declare module '@ChrisTalman/gocardless'
 		description: string;
 	}
 	// Events
-	export interface Event
+	export type Event = MandateEvent | PaymentEvent;
+	export interface BaseEvent
 	{
 		id: string;
 		action: string;
@@ -111,6 +112,63 @@ declare module '@ChrisTalman/gocardless'
 		previous_customer_bank_account?: string;
 		refund?: string;
 		subscription?: string;
+	}
+	// Events: Mandate
+	export interface MandateEvent extends BaseEvent
+	{
+		details: MandateEventDetails;
+	}
+	export interface MandateEventDetails extends EventDetails
+	{
+		cause:
+			'mandate_created' |
+			'customer_approval_granted' |
+			'customer_approval_skipped' |
+			'mandate_submitted' |
+			'mandate_activated' |
+			'mandate_cancelled' |
+			'mandate_expired' |
+			'resubmission_requested' |
+			'mandate_reinstated' |
+			'bank_account_closed' |
+			'invalid_bank_details' |
+			'direct_debit_not_enabled' |
+			'bank_account_transferred' |
+			'authorisation_disputed' |
+			'scheme_identifier_changed'
+		;
+	}
+	// Events: Payment
+	export interface PaymentEvent extends BaseEvent
+	{
+		details: PaymentEventDetails;
+	}
+	export interface PaymentEventDetails extends EventDetails
+	{
+		cause:
+			'payment_created' |
+			'customer_approval_granted' |
+			'customer_approval_denied' |
+			'payment_cancelled' |
+			'payment_submitted' |
+			'payment_confirmed' |
+			'payment_paid_out' |
+			'payment_retried' |
+			'payment_autoretried' |
+			'late_failure_settled' |
+			'chargeback_settled' |
+			'test_failure' |
+			'insufficient_funds' |
+			'refer_to_payer' |
+			'bank_account_closed' |
+			'direct_debit_not_enabled' |
+			'invalid_bank_details' |
+			'bank_account_transferred' |
+			'mandate_cancelled' |
+			'mandate_expired' |
+			'authorisation_disputed' |
+			'refund_requested'
+		;
 	}
 	// Metadata
 	interface Metadata
