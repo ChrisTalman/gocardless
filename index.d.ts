@@ -82,6 +82,36 @@ declare module '@ChrisTalman/gocardless'
 		successRedirectUrl: string;
 		description: string;
 	}
+	// Events
+	export interface Event
+	{
+		id: string;
+		action: string;
+		created_at: string;
+		details: EventDetails;
+		metadata: object;
+		resource_type: 'payments' | 'mandates' | 'payouts' | 'refunds' | 'subscriptions';
+		links: EventLinks;
+	}
+	export interface EventDetails
+	{
+		cause: string;
+		description: string;
+		origin: 'bank' | 'gocardless' | 'api' | 'customer';
+	}
+	export interface EventLinks
+	{
+		mandate?: string;
+		new_customer_bank_account?: string;
+		new_mandate?: string;
+		organisation?: string;
+		parent_event?: string;
+		payment?: string;
+		payout?: string;
+		previous_customer_bank_account?: string;
+		refund?: string;
+		subscription?: string;
+	}
 	// Metadata
 	interface Metadata
 	{
