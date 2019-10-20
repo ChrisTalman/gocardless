@@ -116,6 +116,7 @@ declare module '@ChrisTalman/gocardless'
 	// Events: Mandate
 	export interface MandateEvent extends BaseEvent
 	{
+		resource_type: 'mandates';
 		details: MandateEventDetails;
 	}
 	export interface MandateEventDetails extends EventDetails
@@ -141,6 +142,7 @@ declare module '@ChrisTalman/gocardless'
 	// Events: Payment
 	export interface PaymentEvent extends BaseEvent
 	{
+		resource_type: 'payments';
 		details: PaymentEventDetails;
 	}
 	export interface PaymentEventDetails extends EventDetails
