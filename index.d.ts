@@ -83,6 +83,11 @@ declare module '@ChrisTalman/gocardless'
 		description: string;
 	}
 	// Events
+	export interface EventsList
+	{
+		events: Events;
+	}
+	export interface Events extends Array<Event> {}
 	export type Event = MandateEvent | PaymentEvent;
 	export interface BaseEvent
 	{
