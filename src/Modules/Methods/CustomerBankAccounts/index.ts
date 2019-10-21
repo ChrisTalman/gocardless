@@ -10,8 +10,9 @@ export interface CustomerBankAccount
 {
 	id: string;
 	created_at: string;
-	bank_name: string;
+	account_holder_name: string;
 	account_number_ending: string;
+	bank_name: string;
 	currency: string;
 	metadata: Metadata;
 };
