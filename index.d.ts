@@ -24,7 +24,7 @@ declare module '@ChrisTalman/gocardless'
 	// Mandates
 	export class Mandates extends Resource
 	{
-		public create(parameters: MandatesCreateParameters): Promise<Mandate>;
+		public get(parameters: MandatesCreateParameters): Promise<Mandate>;
 	}
 	// Mandates: Get
 	export interface MandatesCreateParameters
