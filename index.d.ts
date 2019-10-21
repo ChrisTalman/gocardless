@@ -56,7 +56,7 @@ declare module '@ChrisTalman/gocardless'
 		account_holder_name: string;
 		account_number_ending: string;
 		bank_name: string;
-		currency: string;
+		currency: Currency;
 		metadata: Metadata;
 	}
 	// Payments
@@ -68,7 +68,7 @@ declare module '@ChrisTalman/gocardless'
 	export interface PaymentsCreateParameters
 	{
 		amount: number;
-		currency: string;
+		currency: Currency;
 		metadata: Metadata;
 		mandate: string;
 	}
@@ -78,7 +78,7 @@ declare module '@ChrisTalman/gocardless'
 		created_at: string;
 		charge_date: string;
 		amount: number;
-		currency: string;
+		currency: Currency;
 		status: string;
 		reference: string;
 		metadata: Metadata;
@@ -103,7 +103,7 @@ declare module '@ChrisTalman/gocardless'
 		created_at: string;
 		charge_date: string;
 		amount: number;
-		currency: string;
+		currency: Currency;
 		status: string;
 		reference: string;
 		metadata: Metadata;
@@ -223,6 +223,8 @@ declare module '@ChrisTalman/gocardless'
 			'refund_requested'
 		;
 	}
+	// Currency
+	export type Currency = 'AUD' | 'CAD' | 'DKK' | 'EUR' | 'GBP' | 'NZD' | 'SEK' | 'USD';
 	// Metadata
 	interface Metadata
 	{

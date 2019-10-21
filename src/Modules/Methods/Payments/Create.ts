@@ -5,12 +5,12 @@ import { Resource } from 'src/Modules/Resource';
 import { throwRejectionApiError } from 'src/Modules/ApiError';
 
 // Types
-import { Metadata } from 'src/Modules/index';
+import { Currency, Metadata } from 'src/Modules/index';
 import { Payment } from 'src/Modules/Methods/Payments';
 interface Parameters
 {
 	amount: number;
-	currency: string;
+	currency: Currency;
 	metadata?: Metadata;
 	mandate: string;
 };

@@ -5,7 +5,7 @@ import { Resource } from 'src/Modules/Resource';
 import { get } from './Get';
 
 // Types
-import { Metadata } from 'src/Modules/index';
+import { Currency, Metadata } from 'src/Modules/index';
 export interface CustomerBankAccount
 {
 	id: string;
@@ -13,7 +13,7 @@ export interface CustomerBankAccount
 	account_holder_name: string;
 	account_number_ending: string;
 	bank_name: string;
-	currency: string;
+	currency: Currency;
 	metadata: Metadata;
 };
 
