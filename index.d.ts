@@ -69,6 +69,14 @@ declare module '@ChrisTalman/gocardless'
 		reference: string;
 		metadata: Metadata;
 		amount_refunded: number;
+		links: RedirectFlowLinks;
+	}
+	export interface RedirectFlowLinks
+	{
+		creditor: string;
+		customer?: string;
+		customer_bank_account?: string;
+		mandate?: string;
 	}
 	// Redirect Flows: Actions
 	export class Actions extends Resource
