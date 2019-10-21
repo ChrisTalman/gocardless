@@ -1,4 +1,5 @@
 // External Modules
+import { Uniform } from '@ChrisTalman/types-helpers';
 import { Domain, RequestJsonError } from '@ChrisTalman/request';
 
 declare module '@ChrisTalman/gocardless'
@@ -25,31 +26,31 @@ declare module '@ChrisTalman/gocardless'
 	// Mandates
 	export class Mandates extends Resource
 	{
-		public get(parameters: MandatesCreateParameters): Promise<Mandate>;
+		public get <GenericMetadata extends Metadata<GenericMetadata> = {}> (parameters: MandatesCreateParameters): Promise<Mandate<GenericMetadata>>;
 	}
 	// Mandates: Get
 	export interface MandatesCreateParameters
 	{
 		id: string;
 	}
-	export interface Mandate
+	export interface Mandate <GenericMetadata extends Metadata<GenericMetadata> = {}>
 	{
 		id: string;
 		created_at: string;
 		status: 'pending_customer_approval' | 'pending_submission' | 'submitted' | 'active' | 'failed' | 'cancelled' | 'expired';
-		metadata: Metadata;
+		metadata: GenericMetadata;
 	}
 	// Customer Bank Accounts
 	export class CustomerBankAccounts extends Resource
 	{
-		public get(parameters: CustomerBankAccountsGetParameters): Promise<CustomerBankAccount>;
+		public get <GenericMetadata extends Metadata<GenericMetadata> = {}> (parameters: CustomerBankAccountsGetParameters): Promise<CustomerBankAccount<GenericMetadata>>;
 	}
 	// Customer Bank Accounts: Get
 	export interface CustomerBankAccountsGetParameters
 	{
 		id: string;
 	}
-	export interface CustomerBankAccount
+	export interface CustomerBankAccount <GenericMetadata extends Metadata<GenericMetadata> = {}>
 	{
 		id: string;
 		created_at: string;
@@ -57,22 +58,22 @@ declare module '@ChrisTalman/gocardless'
 		account_number_ending: string;
 		bank_name: string;
 		currency: Currency;
-		metadata: Metadata;
+		metadata: GenericMetadata;
 	}
 	// Payments
 	export class Payments extends Resource
 	{
-		public create(parameters: PaymentsCreateParameters): Promise<Payment>;
+		public create <GenericMetadata extends Metadata<GenericMetadata> = {}> (parameters: PaymentsCreateParameters<GenericMetadata>): Promise<Payment<GenericMetadata>>;
 	}
 	// Payments: Create
-	export interface PaymentsCreateParameters
+	export interface PaymentsCreateParameters <GenericMetadata extends Metadata<GenericMetadata> = {}>
 	{
 		amount: number;
 		currency: Currency;
 		mandate: string;
-		metadata?: Metadata;
+		metadata?: GenericMetadata;
 	}
-	export interface Payment
+	export interface Payment <GenericMetadata extends Metadata<GenericMetadata> = {}>
 	{
 		id: string;
 		created_at: string;
@@ -81,7 +82,7 @@ declare module '@ChrisTalman/gocardless'
 		currency: Currency;
 		status: string;
 		reference: string;
-		metadata: Metadata;
+		metadata: GenericMetadata;
 		amount_refunded: number;
 	}
 	// Redirect Flows
@@ -106,7 +107,6 @@ declare module '@ChrisTalman/gocardless'
 		currency: Currency;
 		status: string;
 		reference: string;
-		metadata: Metadata;
 		amount_refunded: number;
 		links: RedirectFlowLinks;
 	}
@@ -135,13 +135,13 @@ declare module '@ChrisTalman/gocardless'
 	}
 	export interface Events extends Array<Event> {}
 	export type Event = MandateEvent | PaymentEvent;
-	export interface BaseEvent
+	export interface BaseEvent <GenericMetadata extends Metadata<GenericMetadata> = {}>
 	{
 		id: string;
 		action: string;
 		created_at: string;
 		details: EventDetails;
-		metadata: object;
+		metadata: GenericMetadata;
 		resource_type: 'payments' | 'mandates' | 'payouts' | 'refunds' | 'subscriptions';
 		links: EventLinks;
 	}
@@ -165,7 +165,7 @@ declare module '@ChrisTalman/gocardless'
 		subscription?: string;
 	}
 	// Events: Mandate
-	export interface MandateEvent extends BaseEvent
+	export interface MandateEvent <GenericMetadata extends Metadata<GenericMetadata> = {}> extends BaseEvent <GenericMetadata>
 	{
 		resource_type: 'mandates';
 		details: MandateEventDetails;
@@ -191,7 +191,7 @@ declare module '@ChrisTalman/gocardless'
 		;
 	}
 	// Events: Payment
-	export interface PaymentEvent extends BaseEvent
+	export interface PaymentEvent <GenericMetadata extends Metadata<GenericMetadata> = {}> extends BaseEvent <GenericMetadata>
 	{
 		resource_type: 'payments';
 		details: PaymentEventDetails;
@@ -226,10 +226,7 @@ declare module '@ChrisTalman/gocardless'
 	// Currency
 	export type Currency = 'AUD' | 'CAD' | 'DKK' | 'EUR' | 'GBP' | 'NZD' | 'SEK' | 'USD';
 	// Metadata
-	interface Metadata
-	{
-		[key: string]: string;
-	}
+	export type Metadata <GenericMetadata> = Uniform<GenericMetadata, string>;
 	// API Error
 	export class ApiError extends Error
 	{
