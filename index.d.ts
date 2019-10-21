@@ -69,8 +69,8 @@ declare module '@ChrisTalman/gocardless'
 	{
 		amount: number;
 		currency: Currency;
-		metadata: Metadata;
 		mandate: string;
+		metadata?: Metadata;
 	}
 	export interface Payment
 	{
