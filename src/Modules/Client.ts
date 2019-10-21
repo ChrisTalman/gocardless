@@ -4,6 +4,7 @@
 import { Domain } from '@ChrisTalman/request';
 
 // Internal Modules
+import { Mandates } from './Methods/Mandates';
 import { Payments } from './Methods/Payments';
 import { RedirectFlows } from './Methods/RedirectFlows';
 
@@ -31,6 +32,7 @@ export class Client
 			}
 		);
 	};
+	public mandates = new Mandates({client: this});
 	public payments = new Payments({client: this});
 	public redirectFlows = new RedirectFlows({client: this});
 };

@@ -11,6 +11,7 @@ declare module '@ChrisTalman/gocardless'
 		public readonly version: string;
 		public readonly domain: Domain;
 		constructor({subdomain, accessToken, version}: {subdomain: Client['subdomain'], accessToken: Client['accessToken'], version: Client['version']});
+		public readonly mandates: Mandates;
 		public readonly payments: Payments;
 		public readonly redirectFlows: RedirectFlows;
 	}
@@ -19,6 +20,23 @@ declare module '@ChrisTalman/gocardless'
 	{
 		public readonly _client: Client;
 		constructor({client}: {client: Client});
+	}
+	// Mandates
+	export class Mandates extends Resource
+	{
+		public create(parameters: MandatesCreateParameters): Promise<Mandate>;
+	}
+	// Mandates: Get
+	export interface MandatesCreateParameters
+	{
+		id: string;
+	}
+	export interface Mandate
+	{
+		id: string;
+		created_at: string;
+		status: 'pending_customer_approval' | 'pending_submission' | 'submitted' | 'active' | 'failed' | 'cancelled' | 'expired';
+		metadata: Metadata;
 	}
 	// Payments
 	export class Payments extends Resource

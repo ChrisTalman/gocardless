@@ -6,7 +6,7 @@ import { throwRejectionApiError } from 'src/Modules/ApiError';
 
 // Types
 import { Metadata } from 'src/Modules/index';
-import { Payment} from 'src/Modules/Methods/Payments';
+import { Payment } from 'src/Modules/Methods/Payments';
 interface Parameters
 {
 	amount: number;
