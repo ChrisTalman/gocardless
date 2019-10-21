@@ -9,7 +9,7 @@ import { RedirectFlow } from 'src/Modules/Methods/RedirectFlows';
 interface Parameters
 {
 	redirectFlowId: string;
-	session_token: string;
+	sessionToken: string;
 };
 interface ApiParameters
 {
@@ -23,13 +23,13 @@ interface Result
 	redirect_flows: RedirectFlow;
 };
 
-export async function complete(this: Resource, {redirectFlowId, session_token}: Parameters)
+export async function complete(this: Resource, {redirectFlowId, sessionToken}: Parameters)
 {
 	const body: ApiParameters =
 	{
 		data:
 		{
-			session_token
+			session_token: sessionToken
 		}
 	};
 	const result = await throwRejectionApiError
