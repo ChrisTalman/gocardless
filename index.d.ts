@@ -38,6 +38,25 @@ declare module '@ChrisTalman/gocardless'
 		status: 'pending_customer_approval' | 'pending_submission' | 'submitted' | 'active' | 'failed' | 'cancelled' | 'expired';
 		metadata: Metadata;
 	}
+	// Customer Bank Accounts
+	export class CustomerBankAccounts extends Resource
+	{
+		public get(parameters: CustomerBankAccountsGetParameters): Promise<Mandate>;
+	}
+	// Customer Bank Accounts: Get
+	export interface CustomerBankAccountsGetParameters
+	{
+		id: string;
+	}
+	export interface CustomerBankAccount
+	{
+		id: string;
+		created_at: string;
+		bank_name: string;
+		account_number_ending: string;
+		currency: string;
+		metadata: Metadata;
+	}
 	// Payments
 	export class Payments extends Resource
 	{
