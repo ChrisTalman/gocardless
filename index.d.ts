@@ -42,7 +42,7 @@ declare module '@ChrisTalman/gocardless'
 	// Customer Bank Accounts
 	export class CustomerBankAccounts extends Resource
 	{
-		public get(parameters: CustomerBankAccountsGetParameters): Promise<Mandate>;
+		public get(parameters: CustomerBankAccountsGetParameters): Promise<CustomerBankAccount>;
 	}
 	// Customer Bank Accounts: Get
 	export interface CustomerBankAccountsGetParameters
