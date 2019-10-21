@@ -12,6 +12,7 @@ declare module '@ChrisTalman/gocardless'
 		public readonly domain: Domain;
 		constructor({subdomain, accessToken, version}: {subdomain: Client['subdomain'], accessToken: Client['accessToken'], version: Client['version']});
 		public readonly mandates: Mandates;
+		public readonly customerBankAccounts: CustomerBankAccounts;
 		public readonly payments: Payments;
 		public readonly redirectFlows: RedirectFlows;
 	}
