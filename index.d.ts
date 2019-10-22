@@ -131,7 +131,7 @@ declare module '@ChrisTalman/gocardless'
 	// Redirect Flows: Actions: Create
 	export interface RedirectFlowsActionsCompleteParameters
 	{
-		redirectFlowId: string;
+		id: string;
 		sessionToken: string;
 	}
 	// Events
