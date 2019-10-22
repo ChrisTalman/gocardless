@@ -39,6 +39,14 @@ declare module '@ChrisTalman/gocardless'
 		created_at: string;
 		status: 'pending_customer_approval' | 'pending_submission' | 'submitted' | 'active' | 'failed' | 'cancelled' | 'expired';
 		metadata: GenericMetadata;
+		links: MandateLinks;
+	}
+	export interface MandateLinks
+	{
+		creditor: string;
+		customer: string;
+		customer_bank_account: string;
+		new_mandate?: string;
 	}
 	// Customer Bank Accounts
 	export class CustomerBankAccounts extends Resource
@@ -59,6 +67,11 @@ declare module '@ChrisTalman/gocardless'
 		bank_name: string;
 		currency: Currency;
 		metadata: GenericMetadata;
+		links: CustomerBankAccountLinks;
+	}
+	export interface CustomerBankAccountLinks
+	{
+		customer: string;
 	}
 	// Payments
 	export class Payments extends Resource
@@ -90,6 +103,14 @@ declare module '@ChrisTalman/gocardless'
 		reference: string;
 		metadata: GenericMetadata;
 		amount_refunded: number;
+		links: PaymentLinks;
+	}
+	export interface PaymentLinks
+	{
+		creditor: string;
+		mandate: string;
+		payout?: string;
+		subscription?: string;
 	}
 	// Redirect Flows
 	export class RedirectFlows extends Resource
