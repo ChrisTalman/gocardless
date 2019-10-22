@@ -14,7 +14,7 @@ export interface Payment
 	charge_date: string;
 	amount: number;
 	currency: Currency;
-	status: string;
+	status: 'pending_customer_approval' | 'pending_submission' | 'submitted' | 'confirmed' | 'paid_out' | 'cancelled' | 'customer_approval_denied' | 'failed' | 'charged_back';
 	reference: string;
 	metadata: Metadata;
 	amount_refunded: number;
