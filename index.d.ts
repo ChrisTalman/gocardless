@@ -63,7 +63,13 @@ declare module '@ChrisTalman/gocardless'
 	// Payments
 	export class Payments extends Resource
 	{
+		public get <GenericMetadata extends Metadata<GenericMetadata> = {}> (parameters: PaymentsGetParameters<GenericMetadata>): Promise<Payment<GenericMetadata>>;
 		public create <GenericMetadata extends Metadata<GenericMetadata> = {}> (parameters: PaymentsCreateParameters<GenericMetadata>): Promise<Payment<GenericMetadata>>;
+	}
+	// Payments: Get
+	export interface PaymentsGetParameters <GenericMetadata extends Metadata<GenericMetadata> = {}>
+	{
+		id: string;
 	}
 	// Payments: Create
 	export interface PaymentsCreateParameters <GenericMetadata extends Metadata<GenericMetadata> = {}>

@@ -2,6 +2,7 @@
 
 // Internal Modules
 import { Resource } from 'src/Modules/Resource';
+import { get } from './Get';
 import { create } from './Create';
 
 // Types
@@ -21,5 +22,6 @@ export interface Payment
 
 export class Payments extends Resource
 {
+	public get = get;
 	public create = create;
 };

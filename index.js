@@ -180,6 +180,18 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 
 /***/ }),
 
+/***/ "./src/Modules/Methods/Payments/Get.ts":
+/*!*********************************************!*\
+  !*** ./src/Modules/Methods/Payments/Get.ts ***!
+  \*********************************************/
+/*! exports provided: get */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"get\", function() { return get; });\n/* harmony import */ var src_Modules_ApiError__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! src/Modules/ApiError */ \"./src/Modules/ApiError.ts\");\n\r\n\r\n;\r\n;\r\nasync function get({ id }) {\r\n    const result = await Object(src_Modules_ApiError__WEBPACK_IMPORTED_MODULE_0__[\"throwRejectionApiError\"])(this._client.domain.request({\r\n        method: 'GET',\r\n        path: '/payments/' + id,\r\n        jsonResponseSuccess: true,\r\n        jsonResponseError: true\r\n    }));\r\n    if (result.json === undefined)\r\n        throw new Error('JSON undefined');\r\n    const { payments: payment } = result.json;\r\n    return payment;\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Methods/Payments/Get.ts?");
+
+/***/ }),
+
 /***/ "./src/Modules/Methods/Payments/index.ts":
 /*!***********************************************!*\
   !*** ./src/Modules/Methods/Payments/index.ts ***!
@@ -188,7 +200,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"Payments\", function() { return Payments; });\n/* harmony import */ var src_Modules_Resource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! src/Modules/Resource */ \"./src/Modules/Resource.ts\");\n/* harmony import */ var _Create__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Create */ \"./src/Modules/Methods/Payments/Create.ts\");\n\r\n\r\n\r\n;\r\nclass Payments extends src_Modules_Resource__WEBPACK_IMPORTED_MODULE_0__[\"Resource\"] {\r\n    constructor() {\r\n        super(...arguments);\r\n        this.create = _Create__WEBPACK_IMPORTED_MODULE_1__[\"create\"];\r\n    }\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Methods/Payments/index.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"Payments\", function() { return Payments; });\n/* harmony import */ var src_Modules_Resource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! src/Modules/Resource */ \"./src/Modules/Resource.ts\");\n/* harmony import */ var _Get__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Get */ \"./src/Modules/Methods/Payments/Get.ts\");\n/* harmony import */ var _Create__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Create */ \"./src/Modules/Methods/Payments/Create.ts\");\n\r\n\r\n\r\n\r\n;\r\nclass Payments extends src_Modules_Resource__WEBPACK_IMPORTED_MODULE_0__[\"Resource\"] {\r\n    constructor() {\r\n        super(...arguments);\r\n        this.get = _Get__WEBPACK_IMPORTED_MODULE_1__[\"get\"];\r\n        this.create = _Create__WEBPACK_IMPORTED_MODULE_2__[\"create\"];\r\n    }\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Methods/Payments/index.ts?");
 
 /***/ }),
 
@@ -200,7 +212,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"complete\", function() { return complete; });\n/* harmony import */ var src_Modules_ApiError__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! src/Modules/ApiError */ \"./src/Modules/ApiError.ts\");\n\r\n\r\n;\r\n;\r\n;\r\nasync function complete({ redirectFlowId, sessionToken }) {\r\n    const body = {\r\n        data: {\r\n            session_token: sessionToken\r\n        }\r\n    };\r\n    const result = await Object(src_Modules_ApiError__WEBPACK_IMPORTED_MODULE_0__[\"throwRejectionApiError\"])(this._client.domain.request({\r\n        method: 'POST',\r\n        path: '/redirect_flows/' + redirectFlowId + '/actions/complete',\r\n        body,\r\n        jsonResponseSuccess: true,\r\n        jsonResponseError: true\r\n    }));\r\n    if (result.json === undefined)\r\n        throw new Error('JSON undefined');\r\n    const { redirect_flows: redirectFlow } = result.json;\r\n    return redirectFlow;\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Methods/RedirectFlows/Actions/Complete.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"complete\", function() { return complete; });\n/* harmony import */ var src_Modules_ApiError__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! src/Modules/ApiError */ \"./src/Modules/ApiError.ts\");\n\r\n\r\n;\r\n;\r\n;\r\nasync function complete({ id, sessionToken }) {\r\n    const body = {\r\n        data: {\r\n            session_token: sessionToken\r\n        }\r\n    };\r\n    const result = await Object(src_Modules_ApiError__WEBPACK_IMPORTED_MODULE_0__[\"throwRejectionApiError\"])(this._client.domain.request({\r\n        method: 'POST',\r\n        path: '/redirect_flows/' + id + '/actions/complete',\r\n        body,\r\n        jsonResponseSuccess: true,\r\n        jsonResponseError: true\r\n    }));\r\n    if (result.json === undefined)\r\n        throw new Error('JSON undefined');\r\n    const { redirect_flows: redirectFlow } = result.json;\r\n    return redirectFlow;\r\n}\r\n;\r\n\n\n//# sourceURL=webpack:///./src/Modules/Methods/RedirectFlows/Actions/Complete.ts?");
 
 /***/ }),
 

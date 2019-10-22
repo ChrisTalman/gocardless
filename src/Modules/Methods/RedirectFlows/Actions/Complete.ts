@@ -8,7 +8,7 @@ import { throwRejectionApiError } from 'src/Modules/ApiError';
 import { RedirectFlow } from 'src/Modules/Methods/RedirectFlows';
 interface Parameters
 {
-	redirectFlowId: string;
+	id: string;
 	sessionToken: string;
 };
 interface ApiParameters
@@ -23,7 +23,7 @@ interface Result
 	redirect_flows: RedirectFlow;
 };
 
-export async function complete(this: Resource, {redirectFlowId, sessionToken}: Parameters)
+export async function complete(this: Resource, {id, sessionToken}: Parameters)
 {
 	const body: ApiParameters =
 	{
@@ -38,7 +38,7 @@ export async function complete(this: Resource, {redirectFlowId, sessionToken}: P
 		(
 			{
 				method: 'POST',
-				path: '/redirect_flows/' + redirectFlowId + '/actions/complete',
+				path: '/redirect_flows/' + id + '/actions/complete',
 				body,
 				jsonResponseSuccess: true,
 				jsonResponseError: true
