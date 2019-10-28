@@ -22,7 +22,7 @@ export async function get(this: Resource, {id}: Parameters)
 		this._client.domain.request <Result>
 		(
 			{
-				method: 'POST',
+				method: 'GET',
 				path: '/mandates/' + id,
 				jsonResponseSuccess: true,
 				jsonResponseError: true
