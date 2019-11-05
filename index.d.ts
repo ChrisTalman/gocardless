@@ -88,6 +88,7 @@ declare module '@ChrisTalman/gocardless'
 	export interface PaymentsCreateParameters <GenericMetadata extends Metadata<GenericMetadata> = {}>
 	{
 		amount: number;
+		appFee?: number;
 		currency: Currency;
 		mandate: string;
 		metadata?: GenericMetadata;

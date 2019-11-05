@@ -10,6 +10,7 @@ import { Payment } from 'src/Modules/Methods/Payments';
 interface Parameters
 {
 	amount: number;
+	appFee?: number;
 	currency: Currency;
 	metadata?: Metadata;
 	mandate: string;
@@ -19,6 +20,7 @@ interface ApiParameters
 	payments:
 	{
 		amount: number;
+		app_fee?: number;
 		currency: string;
 		metadata?: Metadata;
 		links: ApiParametersLinks;
@@ -33,7 +35,7 @@ interface Result
 	payments: Payment;
 };
 
-export async function create(this: Resource, {amount, currency, metadata, mandate}: Parameters)
+export async function create(this: Resource, {amount, appFee, currency, metadata, mandate}: Parameters)
 {
 	const body: ApiParameters =
 	{
@@ -41,6 +43,7 @@ export async function create(this: Resource, {amount, currency, metadata, mandat
 		{
 			amount,
 			currency,
+			app_fee: appFee,
 			metadata,
 			links:
 			{
