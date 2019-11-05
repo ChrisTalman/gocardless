@@ -2,7 +2,7 @@
 import { Uniform } from '@ChrisTalman/types-helpers';
 import { Domain, RequestJsonError } from '@ChrisTalman/request';
 
-declare module '@ChrisTalman/gocardless'
+declare module '@chris-talman/gocardless'
 {
 	// Client
 	export class Client

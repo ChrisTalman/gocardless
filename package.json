@@ -1,5 +1,5 @@
 {
-	"name": "@ChrisTalman/gocardless",
+	"name": "@chris-talman/gocardless",
 	"description": "Methods to access the GoCardless API",
 	"version": "3.1.0",
 	"devDependencies": {

@@ -1,0 +1,7 @@
+# Exclude everything
+**
+# Include specific files
+!/index.js
+!/index.d.ts
+!/package.json
+!/package-lock.json
