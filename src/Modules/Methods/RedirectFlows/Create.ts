@@ -2,11 +2,11 @@
 
 // Internal Modules
 import { Resource } from 'src/Modules/Resource';
-import { throwRejectionApiError } from 'src/Modules/ApiError';
 
 // Types
+import { RequestOptionsWrapper } from 'src/Modules';
 import { RedirectFlow } from 'src/Modules/Methods/RedirectFlows';
-interface Parameters
+interface Parameters extends RequestOptionsWrapper
 {
 	sessionToken: string;
 	successRedirectUrl: string;
@@ -26,7 +26,7 @@ interface Result
 	redirect_flows: RedirectFlow;
 };
 
-export async function create(this: Resource, {sessionToken, successRedirectUrl, description}: Parameters)
+export async function create(this: Resource, {sessionToken, successRedirectUrl, description, options}: Parameters)
 {
 	const body: ApiParameters =
 	{
@@ -37,18 +37,19 @@ export async function create(this: Resource, {sessionToken, successRedirectUrl, 
 			description
 		}
 	};
-	const result = await throwRejectionApiError
+	const result = await this._client.executeApiRequest <Result>
 	(
-		this._client.domain.request <Result>
-		(
+		{
+			request:
 			{
 				method: 'POST',
 				path: '/redirect_flows',
 				body,
 				jsonResponseSuccess: true,
 				jsonResponseError: true
-			}
-		)
+			},
+			options
+		}
 	);
 	if (result.json === undefined) throw new Error('JSON undefined');
 	const { redirect_flows: redirectFlow } = result.json;

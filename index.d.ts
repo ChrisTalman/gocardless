@@ -1,6 +1,6 @@
 // External Modules
 import { Uniform } from '@ChrisTalman/types-helpers';
-import { Domain, RequestJsonError } from '@ChrisTalman/request';
+import { Domain, RequestJsonError } from '@chris-talman/request';
 
 declare module '@chris-talman/gocardless'
 {
@@ -11,7 +11,11 @@ declare module '@chris-talman/gocardless'
 		public readonly accessToken: string;
 		public readonly version: string;
 		public readonly domain: Domain;
-		constructor({subdomain, accessToken, version}: {subdomain: Client['subdomain'], accessToken: Client['accessToken'], version: Client['version']});
+		constructor
+		(
+			{ subdomain, accessToken, version, queueItemTimeoutMilliseconds }:
+			{ subdomain: Client['subdomain'], accessToken: Client['accessToken'], version: Client['version'], queueItemTimeoutMilliseconds?: number }
+		);
 		public readonly mandates: Mandates;
 		public readonly customerBankAccounts: CustomerBankAccounts;
 		public readonly payments: Payments;
@@ -29,7 +33,7 @@ declare module '@chris-talman/gocardless'
 		public get <GenericMetadata extends Metadata<GenericMetadata> = {}> (parameters: MandatesCreateParameters): Promise<Mandate<GenericMetadata>>;
 	}
 	// Mandates: Get
-	export interface MandatesCreateParameters
+	export interface MandatesCreateParameters extends RequestOptionsWrapper
 	{
 		id: string;
 	}
@@ -54,7 +58,7 @@ declare module '@chris-talman/gocardless'
 		public get <GenericMetadata extends Metadata<GenericMetadata> = {}> (parameters: CustomerBankAccountsGetParameters): Promise<CustomerBankAccount<GenericMetadata>>;
 	}
 	// Customer Bank Accounts: Get
-	export interface CustomerBankAccountsGetParameters
+	export interface CustomerBankAccountsGetParameters extends RequestOptionsWrapper
 	{
 		id: string;
 	}
@@ -80,12 +84,12 @@ declare module '@chris-talman/gocardless'
 		public create <GenericMetadata extends Metadata<GenericMetadata> = {}> (parameters: PaymentsCreateParameters<GenericMetadata>): Promise<Payment<GenericMetadata>>;
 	}
 	// Payments: Get
-	export interface PaymentsGetParameters <GenericMetadata extends Metadata<GenericMetadata> = {}>
+	export interface PaymentsGetParameters <GenericMetadata extends Metadata<GenericMetadata> = {}> extends RequestOptionsWrapper
 	{
 		id: string;
 	}
 	// Payments: Create
-	export interface PaymentsCreateParameters <GenericMetadata extends Metadata<GenericMetadata> = {}>
+	export interface PaymentsCreateParameters <GenericMetadata extends Metadata<GenericMetadata> = {}> extends RequestOptionsWrapper
 	{
 		amount: number;
 		appFee?: number;
@@ -120,7 +124,7 @@ declare module '@chris-talman/gocardless'
 		public actions: Actions;
 	}
 	// Redirect Flows: Create
-	export interface RedirectFlowsCreateParameters
+	export interface RedirectFlowsCreateParameters extends RequestOptionsWrapper
 	{
 		sessionToken: string;
 		successRedirectUrl: string;
@@ -151,7 +155,7 @@ declare module '@chris-talman/gocardless'
 		public complete(parameters: RedirectFlowsActionsCompleteParameters): Promise<RedirectFlow>;
 	}
 	// Redirect Flows: Actions: Create
-	export interface RedirectFlowsActionsCompleteParameters
+	export interface RedirectFlowsActionsCompleteParameters extends RequestOptionsWrapper
 	{
 		id: string;
 		sessionToken: string;
@@ -250,6 +254,15 @@ declare module '@chris-talman/gocardless'
 			'authorisation_disputed' |
 			'refund_requested'
 		;
+	}
+	// Request Options
+	export interface RequestOptions
+	{
+		useQueue?: boolean;
+	}
+	export interface RequestOptionsWrapper
+	{
+		options?: RequestOptions;
 	}
 	// Currency
 	export type Currency = 'AUD' | 'CAD' | 'DKK' | 'EUR' | 'GBP' | 'NZD' | 'SEK' | 'USD';

@@ -2,11 +2,11 @@
 
 // Internal Modules
 import { Resource } from 'src/Modules/Resource';
-import { throwRejectionApiError } from 'src/Modules/ApiError';
 
 // Types
+import { RequestOptionsWrapper } from 'src/Modules';
 import { Payment } from 'src/Modules/Methods/Payments';
-interface Parameters
+interface Parameters extends RequestOptionsWrapper
 {
 	id: string;
 };
@@ -15,19 +15,20 @@ interface Result
 	payments: Payment;
 };
 
-export async function get(this: Resource, {id}: Parameters)
+export async function get(this: Resource, {id, options}: Parameters)
 {
-	const result = await throwRejectionApiError
+	const result = await this._client.executeApiRequest <Result>
 	(
-		this._client.domain.request <Result>
-		(
+		{
+			request:
 			{
 				method: 'GET',
 				path: '/payments/' + id,
 				jsonResponseSuccess: true,
 				jsonResponseError: true
-			}
-		)
+			},
+			options
+		}
 	);
 	if (result.json === undefined) throw new Error('JSON undefined');
 	const { payments: payment } = result.json;

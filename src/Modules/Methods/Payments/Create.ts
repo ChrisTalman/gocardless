@@ -2,12 +2,11 @@
 
 // Internal Modules
 import { Resource } from 'src/Modules/Resource';
-import { throwRejectionApiError } from 'src/Modules/ApiError';
 
 // Types
-import { Currency, Metadata } from 'src/Modules/index';
+import { Currency, Metadata, RequestOptionsWrapper } from 'src/Modules';
 import { Payment } from 'src/Modules/Methods/Payments';
-interface Parameters
+interface Parameters extends RequestOptionsWrapper
 {
 	amount: number;
 	appFee?: number;
@@ -35,7 +34,7 @@ interface Result
 	payments: Payment;
 };
 
-export async function create(this: Resource, {amount, appFee, currency, metadata, mandate}: Parameters)
+export async function create(this: Resource, {amount, appFee, currency, metadata, mandate, options}: Parameters)
 {
 	const body: ApiParameters =
 	{
@@ -51,18 +50,19 @@ export async function create(this: Resource, {amount, appFee, currency, metadata
 			}
 		}
 	};
-	const result = await throwRejectionApiError
+	const result = await this._client.executeApiRequest <Result>
 	(
-		this._client.domain.request <Result>
-		(
+		{
+			request:
 			{
 				method: 'POST',
 				path: '/payments',
 				body,
 				jsonResponseSuccess: true,
 				jsonResponseError: true
-			}
-		)
+			},
+			options
+		}
 	);
 	if (result.json === undefined) throw new Error('JSON undefined');
 	const { payments: payment } = result.json;
