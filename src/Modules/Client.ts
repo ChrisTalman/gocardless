@@ -28,6 +28,7 @@ interface RateLimitCluster
 	/** Number of requests in queue in cluster. */
 	queue: number;
 };
+type RateLimitVariant = RateLimit | undefined;
 interface Queue extends Array<QueueItem> {};
 type QueueItem = PromiseController;
 
@@ -38,9 +39,8 @@ export class Client
 	public readonly version: string;
 	public readonly domain: Domain;
 	private readonly queue: Queue = [];
-	private rateLimit: RateLimit | undefined;
-	public fetchRateLimit?: () => Promise<RateLimit>;
-	public onRateLimitConsumed?: (rateLimit: RateLimit) => any;
+	private rateLimit: RateLimitVariant;
+	public fetchRateLimit?: (rateLimit: RateLimitVariant) => Promise<RateLimit>;
 	private rateLimitResetTimeout?: NodeJS.Timeout;
 	private queueItemTimeoutMilliseconds = 180000;
 	constructor
@@ -90,7 +90,7 @@ export class Client
 	};
 	public async consumeRateLimit({useQueue}: {useQueue: boolean})
 	{
-		const rateLimit = this.fetchRateLimit ? await this.fetchRateLimit() : this.rateLimit;
+		const rateLimit = this.fetchRateLimit ? await this.fetchRateLimit(this.rateLimit) : this.rateLimit;
 		if (rateLimit === undefined) return;
 		if (rateLimit.remaining > 0)
 		{
@@ -149,13 +149,6 @@ export class Client
 	{
 		if (this.rateLimit === undefined) throw new Error('Rate limit undefined');
 		this.rateLimit.remaining -= 1;
-		this.dispatchRateLimitConsumedEvent();
-	};
-	private dispatchRateLimitConsumedEvent()
-	{
-		if (!this.onRateLimitConsumed) return;
-		if (this.rateLimit === undefined) throw new Error('Rate limit undefined');
-		this.onRateLimitConsumed(this.rateLimit);
 	};
 	public mandates = new Mandates({client: this});
 	public customerBankAccounts = new CustomerBankAccounts({client: this});

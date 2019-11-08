@@ -11,8 +11,7 @@ declare module '@chris-talman/gocardless'
 		public readonly accessToken: string;
 		public readonly version: string;
 		public readonly domain: Domain;
-		public fetchRateLimit?: () => Promise<RateLimit>;
-		public onRateLimitConsumed?: (rateLimit: RateLimit) => any;
+		public fetchRateLimit?: (rateLimit: RateLimitVariant) => Promise<RateLimit>;
 		constructor
 		(
 			{ subdomain, accessToken, version, queueItemTimeoutMilliseconds }:
@@ -37,6 +36,7 @@ declare module '@chris-talman/gocardless'
 		/** Number of requests in queue in cluster. */
 		queue: number;
 	}
+	type RateLimitVariant = RateLimit | undefined;
 	// Resource
 	class Resource
 	{
