@@ -1,7 +1,7 @@
 'use strict';
 
 // External Modules
-import { RequestJsonError } from '@ChrisTalman/request';
+import { RequestJsonError } from '@chris-talman/request';
 
 // Types
 interface ApiErrorPayload

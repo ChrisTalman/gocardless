@@ -1,7 +1,7 @@
 'use strict';
 
 // External Modules
-import { Domain } from '@ChrisTalman/request';
+import { Domain } from '@chris-talman/request';
 
 // Internal Modules
 import { Mandates } from './Methods/Mandates';

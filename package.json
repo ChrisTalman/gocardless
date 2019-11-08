@@ -12,8 +12,9 @@
 		"webpack-node-externals": "1.7.2"
 	},
 	"dependencies": {
-		"@ChrisTalman/request": "github:ChrisTalman/request",
-		"@ChrisTalman/types-helpers": "github:ChrisTalman/types-helpers"
+		"@ChrisTalman/types-helpers": "github:ChrisTalman/types-helpers",
+		"@chris-talman/isomorphic-utilities": "1.10.0",
+		"@chris-talman/request": "2.0.1"
 	},
 	"scripts": {
 		"build": "./node_modules/.bin/webpack",
