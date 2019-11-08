@@ -39,8 +39,8 @@ export class Client
 	public readonly domain: Domain;
 	private readonly queue: Queue = [];
 	private rateLimit: RateLimit | undefined;
-	private fetchRateLimit?: () => Promise<RateLimit>;
-	private onRateLimitConsumed?: (rateLimit: RateLimit) => any;
+	public fetchRateLimit?: () => Promise<RateLimit>;
+	public onRateLimitConsumed?: (rateLimit: RateLimit) => any;
 	private rateLimitResetTimeout?: NodeJS.Timeout;
 	private queueItemTimeoutMilliseconds = 180000;
 	constructor
