@@ -1,11 +1,12 @@
 'use strict';
 
 // External Modules
-import { Domain, Definition as RequestDefinition } from '@chris-talman/request';
+import { Domain, Definition as RequestDefinition, Result as RequestResult, RequestJsonError } from '@chris-talman/request';
 import { delay, PromiseController } from '@chris-talman/isomorphic-utilities';
 
 // Internal Modules
 import { RateLimitError, QueueTimeoutError } from './Errors';
+import { ApiError } from './ApiError';
 import { throwRejectionApiError } from 'src/Modules/ApiError';
 import { Mandates } from './Methods/Mandates';
 import { CustomerBankAccounts } from './Methods/CustomerBankAccounts';
@@ -19,18 +20,9 @@ interface RateLimit
 	limit: number;
 	remaining: number;
 	reset: number;
-	cluster?: RateLimitCluster;
-};
-interface RateLimitCluster
-{
-	/** Number of nodes in cluster. */
-	nodes: number;
-	/** Number of requests in queue in cluster. */
-	queue: number;
 };
 type RateLimitVariant = RateLimit | undefined;
-interface Queue extends Array<QueueItem> {};
-type QueueItem = PromiseController;
+interface Queue extends Array<ScheduledRequest<any>> {};
 
 export class Client
 {
@@ -40,7 +32,12 @@ export class Client
 	public readonly domain: Domain;
 	private readonly queue: Queue = [];
 	private rateLimit: RateLimitVariant;
-	public fetchRateLimit?: (rateLimit: RateLimitVariant) => Promise<RateLimit>;
+	/**
+		Callback invoked before every request to validate that the rate limit has not been exceeded.
+		If returns `true`, request will proceed.
+		If returns `false`, request will not proceed, and `RateLimitError` will throw, unless `options.useQueue` is enabled.
+	*/
+	public validateRateLimit?: (rateLimit: RateLimitVariant) => Promise<boolean>;
 	private rateLimitResetTimeout?: NodeJS.Timeout;
 	private queueItemTimeoutMilliseconds = 180000;
 	constructor
@@ -66,12 +63,37 @@ export class Client
 		);
 		if (typeof queueItemTimeoutMilliseconds === 'number') this.queueItemTimeoutMilliseconds = queueItemTimeoutMilliseconds;
 	};
-	public async executeApiRequest <GenericResult> ({request: requestDefinition, options}: {request: RequestDefinition, options?: RequestOptions})
+	public async scheduleApiRequest <GenericResultJson> ({request, options = {}}: {request: RequestDefinition, options?: RequestOptions})
 	{
-		const { useQueue } = generateDefaultRequestOptions(options);
-		await this.consumeRateLimit({useQueue: useQueue === true});
-		const result = await throwRejectionApiError(this.domain.request<GenericResult>(requestDefinition));
-		const { headers } = result.response;
+		const scheduledRequest = new ScheduledRequest <GenericResultJson> ({request, options});
+		const result = await scheduledRequest.promiseController.promise;
+		return result;
+	};
+	public async executeApiRequest <GenericResultJson, GenericResult extends RequestResult<GenericResultJson>> ({request}: {request: RequestDefinition})
+	{
+		let result: GenericResult;
+		try
+		{
+			result = await throwRejectionApiError(this.domain.request(request));
+		}
+		catch (error)
+		{
+			if (error instanceof RequestJsonError)
+			{
+				this.recordRateLimit(error.response);
+			}
+			else if (error instanceof ApiError)
+			{
+				this.recordRateLimit(error.error.response);
+			};
+			throw error;
+		};
+		this.recordRateLimit(result.response);
+		return result;
+	};
+	private recordRateLimit(response: RequestResult<any>['response'])
+	{
+		const { headers } = response;
 		const rawLimit = headers.get('RateLimit-Limit');
 		const rawRemaining = headers.get('RateLimit-Remaining');
 		const rawReset = headers.get('RateLimit-Reset');
@@ -86,32 +108,38 @@ export class Client
 			reset
 		};
 		this.rateLimit = rateLimit;
-		return result;
 	};
-	public async consumeRateLimit({useQueue}: {useQueue: boolean})
+	public async consumeRateLimit <GenericScheduledRequest extends ScheduledRequest<any>> (scheduledRequest: GenericScheduledRequest)
 	{
-		const rateLimit = this.fetchRateLimit ? await this.fetchRateLimit(this.rateLimit) : this.rateLimit;
-		if (rateLimit === undefined) return;
-		if (rateLimit.remaining > 0)
+		if (this.validateRateLimit)
+		{
+			const valid = await this.validateRateLimit(this.rateLimit);
+			if (!valid)
+			{
+				if (!scheduledRequest.options.useQueue)
+				{
+					throw new RateLimitError();
+				};
+			};
+		};
+		if (this.rateLimit === undefined || this.rateLimit.remaining > 0)
 		{
 			this.recordRateLimitConsumed();
 			return;
-		}
-		if (!useQueue)
+		};
+		if (!scheduledRequest.options.useQueue)
 		{
 			throw new RateLimitError();
 		};
-		const queueItem = new PromiseController();
-		this.queue.push(queueItem);
-		this.timeoutQueueItem(queueItem);
+		this.guaranteeQueueItem(scheduledRequest);
+		this.timeoutQueueItem(scheduledRequest);
 		this.guaranteeRateLimitResetTimeout();
-		await queueItem.promise;
 	};
-	private async timeoutQueueItem(item: QueueItem)
+	private async timeoutQueueItem <GenericScheduledRequest extends ScheduledRequest<any>> (item: GenericScheduledRequest)
 	{
 		await delay(this.queueItemTimeoutMilliseconds);
 		const timeoutError = new QueueTimeoutError();
-		item.reject(timeoutError);
+		item.promiseController.reject(timeoutError);
 	};
 	private guaranteeRateLimitResetTimeout()
 	{
@@ -132,16 +160,10 @@ export class Client
 	private processQueue()
 	{
 		if (this.rateLimit === undefined) throw new Error('Rate limit undefined');
-		let processableTotal = this.rateLimit.limit;
-		if (this.rateLimit.cluster)
+		const processable = this.queue.slice(0, this.rateLimit.limit);
+		for (let item of processable)
 		{
-			processableTotal = Math.floor(this.rateLimit.limit / this.rateLimit.cluster.nodes);
-		};
-		const processableQueue = this.queue.slice(0, processableTotal);
-		for (let item of processableQueue)
-		{
-			item.resolve(undefined);
-			this.recordRateLimitConsumed();
+			item.execute();
 		};
 		this.guaranteeRateLimitResetTimeout();
 	};
@@ -150,20 +172,75 @@ export class Client
 		if (this.rateLimit === undefined) throw new Error('Rate limit undefined');
 		this.rateLimit.remaining -= 1;
 	};
+	public guaranteeQueueItem <GenericScheduledRequest extends ScheduledRequest<any>> (item: GenericScheduledRequest)
+	{
+		const queueItem = this.queue.find(currentItem => currentItem === item);
+		if (queueItem) return;
+		this.queue.push(item);
+	};
+	public removeQueueItem <GenericScheduledRequest extends ScheduledRequest<any>> (item: GenericScheduledRequest)
+	{
+		const queueItemIndex = this.queue.findIndex(currentItem => currentItem === item);
+		if (queueItemIndex === -1) return;
+		this.queue.splice(queueItemIndex, 1);
+	};
 	public mandates = new Mandates({client: this});
 	public customerBankAccounts = new CustomerBankAccounts({client: this});
 	public payments = new Payments({client: this});
 	public redirectFlows = new RedirectFlows({client: this});
 };
 
-function generateDefaultRequestOptions(options: RequestOptions | undefined)
+export class ScheduledRequest <GenericResultJson, GenericResult extends RequestResult<GenericResultJson> = RequestResult<GenericResultJson>>
 {
-	if (options === undefined)
+	public readonly client: Client;
+	public readonly request: RequestDefinition;
+	public readonly options: RequestOptions;
+	public readonly promiseController: PromiseController <RequestResult<GenericResultJson>>;
+	private executing = false;
+	constructor({request, options}: {request: RequestDefinition, options: RequestOptions})
 	{
-		options =
-		{
-			useQueue: false
-		};
+		this.request = request;
+		this.options = options;
+		this.promiseController = new PromiseController();
+		this.execute();
 	};
-	return options;
+	public async execute()
+	{
+		if (this.executing) return;
+		this.executing = true;
+		try
+		{
+			await this.client.consumeRateLimit(this);
+		}
+		catch (error)
+		{
+			this.reject(error);
+		};
+		const { request } = this;
+		let result: GenericResult;
+		try
+		{
+			result = await this.client.executeApiRequest({request});
+		}
+		catch (error)
+		{
+			if (error instanceof ApiError && error.type === 'invalid_api_usage' && error.errors.some(error => 'reason' in error && error.reason === 'rate_limit_exceeded'))
+			{
+				this.executing = false;
+				this.client.guaranteeQueueItem(this);
+			}
+			else
+			{
+				this.reject(error);
+			};
+			return;
+		};
+		this.client.removeQueueItem(this);
+		this.promiseController.resolve(result);
+	};
+	private reject(error: any)
+	{
+		this.client.removeQueueItem(this);
+		this.promiseController.reject(error);
+	};
 };

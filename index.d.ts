@@ -11,7 +11,12 @@ declare module '@chris-talman/gocardless'
 		public readonly accessToken: string;
 		public readonly version: string;
 		public readonly domain: Domain;
-		public fetchRateLimit?: (rateLimit: RateLimitVariant) => Promise<RateLimit>;
+		/**
+			Callback invoked before every request to validate that the rate limit has not been exceeded.
+			If returns `true`, request will proceed.
+			If returns `false`, request will not proceed, and `RateLimitError` will throw, unless `options.useQueue` is enabled.
+		*/
+		public validateRateLimit?: (rateLimit: RateLimitVariant) => Promise<boolean>;
 		constructor
 		(
 			{ subdomain, accessToken, version, queueItemTimeoutMilliseconds }:
@@ -314,12 +319,12 @@ declare module '@chris-talman/gocardless'
 	interface ApiErrorPayloadErrorErrorsErrorStandard
 	{
 		message: string;
-		field: string;
-		request_pointer: string;
+		reason: 'invalid_type' | 'path_not_found' | 'resource_not_found' | 'link_not_found' | 'unauthorized' | 'forbidden' | 'feature_disabled' | 'not_acceptable' | 'request_entity_too_large' | 'unsupported_media_type' | 'rate_limit_exceeded' | 'access_token_not_found' | 'access_token_not_active' | 'access_token_revoked' | 'missing_authorization_header' | 'invalid_authorization_header' | 'insufficient_permissions' | 'method_not_allowed' | 'bad_request' | 'idempotency_key_too_long' | 'invalid_document_structure' | 'invalid_content_type' | 'tls_required' | 'missing_version_header' | 'version_not_found' | 'invalid_filters' | 'request_body_not_allowed' | 'customer_data_removed' | 'cancellation_failed' | 'retry_failed' | 'disable_failed' | 'mandate_is_inactive' | 'mandate_replaced' | 'bank_account_disabled' | 'mandate_not_inactive' | 'refund_is_unreachable' | 'refund_payment_invalid_state' | 'total_amount_confirmation_invalid' | 'number_of_refunds_exceeded' | 'idempotent_creation_conflict' | 'customer_bank_account_token_used';
 	}
 	interface ApiErrorPayloadErrorErrorsErrorValidation
 	{
 		message: string;
-		reason: string;
+		field: string;
+		request_pointer: string;
 	}
 }

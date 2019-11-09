@@ -1,7 +1,7 @@
 {
 	"name": "@chris-talman/gocardless",
 	"description": "Methods to access the GoCardless API",
-	"version": "3.2.2",
+	"version": "4.0.0",
 	"devDependencies": {
 		"@types/node": "12.11.1",
 		"nodemon": "1.19.4",
@@ -14,7 +14,7 @@
 	"dependencies": {
 		"@ChrisTalman/types-helpers": "github:ChrisTalman/types-helpers",
 		"@chris-talman/isomorphic-utilities": "1.10.0",
-		"@chris-talman/request": "2.0.1"
+		"@chris-talman/request": "2.0.2"
 	},
 	"scripts": {
 		"build": "./node_modules/.bin/webpack",

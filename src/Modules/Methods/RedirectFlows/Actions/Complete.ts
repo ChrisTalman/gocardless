@@ -32,7 +32,7 @@ export async function complete(this: Resource, {id, sessionToken, options}: Para
 			session_token: sessionToken
 		}
 	};
-	const result = await this._client.executeApiRequest <Result>
+	const result = await this._client.scheduleApiRequest <Result>
 	(
 		{
 			request:

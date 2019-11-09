@@ -37,7 +37,7 @@ export async function create(this: Resource, {sessionToken, successRedirectUrl, 
 			description
 		}
 	};
-	const result = await this._client.executeApiRequest <Result>
+	const result = await this._client.scheduleApiRequest <Result>
 	(
 		{
 			request:

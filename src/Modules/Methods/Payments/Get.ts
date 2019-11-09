@@ -17,7 +17,7 @@ interface Result
 
 export async function get(this: Resource, {id, options}: Parameters)
 {
-	const result = await this._client.executeApiRequest <Result>
+	const result = await this._client.scheduleApiRequest <Result>
 	(
 		{
 			request:

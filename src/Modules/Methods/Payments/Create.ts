@@ -50,7 +50,7 @@ export async function create(this: Resource, {amount, appFee, currency, metadata
 			}
 		}
 	};
-	const result = await this._client.executeApiRequest <Result>
+	const result = await this._client.scheduleApiRequest <Result>
 	(
 		{
 			request:
