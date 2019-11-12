@@ -24,6 +24,10 @@ interface RateLimit
 type RateLimitVariant = RateLimit | undefined;
 interface Queue extends Array<ScheduledRequest<any>> {};
 
+// Constants
+const DEFAULT_RATE_LIMIT = 1000;
+const MINUTE_MILLISECONDS = 1000 * 60;
+
 export class Client
 {
 	public readonly subdomain: 'api' | 'api-sandbox';
@@ -65,7 +69,7 @@ export class Client
 	};
 	public async scheduleApiRequest <GenericResultJson> ({request, options = {}}: {request: RequestDefinition, options?: RequestOptions})
 	{
-		const scheduledRequest = new ScheduledRequest <GenericResultJson> ({request, options});
+		const scheduledRequest = new ScheduledRequest <GenericResultJson> ({request, options, client: this});
 		const result = await scheduledRequest.promiseController.promise;
 		return result;
 	};
@@ -169,7 +173,15 @@ export class Client
 	};
 	private recordRateLimitConsumed()
 	{
-		if (this.rateLimit === undefined) throw new Error('Rate limit undefined');
+		if (this.rateLimit === undefined)
+		{
+			this.rateLimit =
+			{
+				limit: DEFAULT_RATE_LIMIT,
+				remaining: DEFAULT_RATE_LIMIT,
+				reset: Date.now() + MINUTE_MILLISECONDS
+			};
+		};
 		this.rateLimit.remaining -= 1;
 	};
 	public guaranteeQueueItem <GenericScheduledRequest extends ScheduledRequest<any>> (item: GenericScheduledRequest)
@@ -197,10 +209,11 @@ export class ScheduledRequest <GenericResultJson, GenericResult extends RequestR
 	public readonly options: RequestOptions;
 	public readonly promiseController: PromiseController <RequestResult<GenericResultJson>>;
 	private executing = false;
-	constructor({request, options}: {request: RequestDefinition, options: RequestOptions})
+	constructor({request, options, client}: {request: RequestDefinition, options: RequestOptions, client: Client})
 	{
 		this.request = request;
 		this.options = options;
+		this.client = client;
 		this.promiseController = new PromiseController();
 		this.execute();
 	};
