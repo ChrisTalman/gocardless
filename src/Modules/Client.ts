@@ -42,7 +42,7 @@ export class Client
 		If returns `false`, request will not proceed, and `RateLimitError` will throw, unless `options.useQueue` is enabled.
 	*/
 	public validateRateLimit?: (rateLimit: RateLimitVariant) => Promise<boolean>;
-	private rateLimitResetTimeout?: NodeJS.Timeout;
+	private rateLimitResetTimeout?: RateLimitResetTimeout;
 	private queueItemTimeoutMilliseconds = 180000;
 	constructor
 	(
@@ -126,10 +126,15 @@ export class Client
 				};
 			};
 		};
-		if (this.rateLimit === undefined || this.rateLimit.remaining > 0)
+		if (this.rateLimit === undefined || this.rateLimit.remaining > 0 || Date.now() >= this.rateLimit.reset)
 		{
+			if (this.rateLimit !== undefined && Date.now() >= this.rateLimit.reset)
+			{
+				this.rateLimit.reset = Date.now() + MINUTE_MILLISECONDS;
+				this.rateLimit.remaining = this.rateLimit.limit;
+			};
 			this.recordRateLimitConsumed();
-			return;
+			return true;
 		};
 		if (!scheduledRequest.options.useQueue)
 		{
@@ -138,6 +143,7 @@ export class Client
 		this.guaranteeQueueItem(scheduledRequest);
 		this.timeoutQueueItem(scheduledRequest);
 		this.guaranteeRateLimitResetTimeout();
+		return false;
 	};
 	private async timeoutQueueItem <GenericScheduledRequest extends ScheduledRequest<any>> (item: GenericScheduledRequest)
 	{
@@ -147,9 +153,9 @@ export class Client
 	};
 	private guaranteeRateLimitResetTimeout()
 	{
-		if (this.rateLimitResetTimeout) return;
+		if ((this.rateLimitResetTimeout && !this.rateLimitResetTimeout.complete) || this.queue.length === 0) return;
 		const delay = this.generateRateLimitResetDelay();
-		this.rateLimitResetTimeout = setTimeout(this.processQueue, delay);
+		this.rateLimitResetTimeout = new RateLimitResetTimeout({callback: () => this.processQueue(), delay});
 	};
 	private generateRateLimitResetDelay()
 	{
@@ -209,6 +215,7 @@ export class ScheduledRequest <GenericResultJson, GenericResult extends RequestR
 	public readonly options: RequestOptions;
 	public readonly promiseController: PromiseController <RequestResult<GenericResultJson>>;
 	private executing = false;
+	private executed = false;
 	constructor({request, options, client}: {request: RequestDefinition, options: RequestOptions, client: Client})
 	{
 		this.request = request;
@@ -219,15 +226,21 @@ export class ScheduledRequest <GenericResultJson, GenericResult extends RequestR
 	};
 	public async execute()
 	{
-		if (this.executing) return;
+		if (this.executing || this.executed) return;
 		this.executing = true;
+		let rateLimitConsumed = false;
 		try
 		{
-			await this.client.consumeRateLimit(this);
+			rateLimitConsumed = await this.client.consumeRateLimit(this);
 		}
 		catch (error)
 		{
 			this.reject(error);
+		};
+		if (!rateLimitConsumed)
+		{
+			this.executing = false;
+			return;
 		};
 		const { request } = this;
 		let result: GenericResult;
@@ -250,10 +263,39 @@ export class ScheduledRequest <GenericResultJson, GenericResult extends RequestR
 		};
 		this.client.removeQueueItem(this);
 		this.promiseController.resolve(result);
+		this.markExecuted();
 	};
 	private reject(error: any)
 	{
 		this.client.removeQueueItem(this);
 		this.promiseController.reject(error);
+		this.markExecuted();
+	};
+	private markExecuted()
+	{
+		this.executed = true;
+		this.executing = false;
+	};
+};
+
+export class RateLimitResetTimeout
+{
+	public readonly timeout: NodeJS.Timeout;
+	public readonly callback: () => void;
+	private _complete: boolean;
+	constructor({callback, delay}: {callback: () => void, delay: number})
+	{
+		this._complete = false;
+		this.callback = callback;
+		this.timeout = setTimeout(() => this.handleComplete(), delay);
+	};
+	get complete()
+	{
+		return this._complete;
+	};
+	private handleComplete()
+	{
+		this._complete = true;
+		this.callback();
 	};
 };
