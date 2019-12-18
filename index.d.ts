@@ -32,14 +32,6 @@ declare module '@chris-talman/gocardless'
 		limit: number;
 		remaining: number;
 		reset: number;
-		cluster?: RateLimitCluster;
-	}
-	interface RateLimitCluster
-	{
-		/** Number of nodes in cluster. */
-		nodes: number;
-		/** Number of requests in queue in cluster. */
-		queue: number;
 	}
 	type RateLimitVariant = RateLimit | undefined;
 	// Resource
