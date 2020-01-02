@@ -1,5 +1,5 @@
 // External Modules
-import { Uniform } from '@ChrisTalman/types-helpers';
+import { Uniform } from '@chris-talman/types-helpers';
 import { Domain, RequestJsonError } from '@chris-talman/request';
 
 declare module '@chris-talman/gocardless'
