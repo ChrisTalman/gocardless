@@ -22,6 +22,7 @@ declare module '@chris-talman/gocardless'
 			{ subdomain, accessToken, version, queueItemTimeoutMilliseconds }:
 			{ subdomain: Client['subdomain'], accessToken: Client['accessToken'], version: Client['version'], queueItemTimeoutMilliseconds?: number }
 		);
+		public readonly creditors: Creditors;
 		public readonly mandates: Mandates;
 		public readonly customerBankAccounts: CustomerBankAccounts;
 		public readonly payments: Payments;
@@ -39,6 +40,19 @@ declare module '@chris-talman/gocardless'
 	{
 		public readonly _client: Client;
 		constructor({client}: {client: Client});
+	}
+	// Creditors
+	export class Creditors extends Resource
+	{
+		public list <GenericMetadata extends Metadata<GenericMetadata> = {}> (parameters?: CreditorsListParameters): Promise<Array<Creditor>>;
+	}
+	// Creditors: List
+	export interface CreditorsListParameters extends RequestOptionsWrapper {}
+	export interface Creditor
+	{
+		id: string;
+		created_at: string;
+		verification_status: 'successful' | 'in_review' | 'action_required';
 	}
 	// Mandates
 	export class Mandates extends Resource

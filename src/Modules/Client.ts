@@ -8,6 +8,7 @@ import { delay, PromiseController } from '@chris-talman/isomorphic-utilities';
 import { RateLimitError, QueueTimeoutError } from './Errors';
 import { ApiError } from './ApiError';
 import { throwRejectionApiError } from 'src/Modules/ApiError';
+import { Creditors } from './Methods/Creditors';
 import { Mandates } from './Methods/Mandates';
 import { CustomerBankAccounts } from './Methods/CustomerBankAccounts';
 import { Payments } from './Methods/Payments';
@@ -202,6 +203,7 @@ export class Client
 		if (queueItemIndex === -1) return;
 		this.queue.splice(queueItemIndex, 1);
 	};
+	public creditors = new Creditors({client: this});
 	public mandates = new Mandates({client: this});
 	public customerBankAccounts = new CustomerBankAccounts({client: this});
 	public payments = new Payments({client: this});
