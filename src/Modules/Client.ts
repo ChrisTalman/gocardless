@@ -2,12 +2,13 @@
 
 // External Modules
 import { Domain, Definition as RequestDefinition, Result as RequestResult, RequestJsonError } from '@chris-talman/request';
-import { delay, PromiseController } from '@chris-talman/isomorphic-utilities';
+import { delay } from '@chris-talman/isomorphic-utilities';
 
 // Internal Modules
+import { throwRejectionApiError } from 'src/Modules/ApiError';
 import { RateLimitError, QueueTimeoutError } from './Errors';
 import { ApiError } from './ApiError';
-import { throwRejectionApiError } from 'src/Modules/ApiError';
+import { ScheduledRequest } from './ScheduledRequest';
 import { Creditors } from './Methods/Creditors';
 import { Mandates } from './Methods/Mandates';
 import { CustomerBankAccounts } from './Methods/CustomerBankAccounts';
@@ -208,76 +209,6 @@ export class Client
 	public customerBankAccounts = new CustomerBankAccounts({client: this});
 	public payments = new Payments({client: this});
 	public redirectFlows = new RedirectFlows({client: this});
-};
-
-export class ScheduledRequest <GenericResultJson, GenericResult extends RequestResult<GenericResultJson> = RequestResult<GenericResultJson>>
-{
-	public readonly client: Client;
-	public readonly request: RequestDefinition;
-	public readonly options: RequestOptions;
-	public readonly promiseController: PromiseController <RequestResult<GenericResultJson>>;
-	private executing = false;
-	private executed = false;
-	constructor({request, options, client}: {request: RequestDefinition, options: RequestOptions, client: Client})
-	{
-		this.request = request;
-		this.options = options;
-		this.client = client;
-		this.promiseController = new PromiseController();
-		this.execute();
-	};
-	public async execute()
-	{
-		if (this.executing || this.executed) return;
-		this.executing = true;
-		let rateLimitConsumed = false;
-		try
-		{
-			rateLimitConsumed = await this.client.consumeRateLimit(this);
-		}
-		catch (error)
-		{
-			this.reject(error);
-		};
-		if (!rateLimitConsumed)
-		{
-			this.executing = false;
-			return;
-		};
-		const { request } = this;
-		let result: GenericResult;
-		try
-		{
-			result = await this.client.executeApiRequest({request});
-		}
-		catch (error)
-		{
-			if (error instanceof ApiError && error.type === 'invalid_api_usage' && error.errors.some(error => 'reason' in error && error.reason === 'rate_limit_exceeded'))
-			{
-				this.executing = false;
-				this.client.guaranteeQueueItem(this);
-			}
-			else
-			{
-				this.reject(error);
-			};
-			return;
-		};
-		this.client.removeQueueItem(this);
-		this.promiseController.resolve(result);
-		this.markExecuted();
-	};
-	private reject(error: any)
-	{
-		this.client.removeQueueItem(this);
-		this.promiseController.reject(error);
-		this.markExecuted();
-	};
-	private markExecuted()
-	{
-		this.executed = true;
-		this.executing = false;
-	};
 };
 
 export class RateLimitResetTimeout

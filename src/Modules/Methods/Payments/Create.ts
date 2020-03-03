@@ -9,10 +9,11 @@ import { Payment } from 'src/Modules/Methods/Payments';
 interface Parameters extends RequestOptionsWrapper
 {
 	amount: number;
-	appFee?: number;
 	currency: Currency;
-	metadata?: Metadata;
 	mandate: string;
+	appFee?: number;
+	retryIfPossible?: boolean;
+	metadata?: Metadata;
 };
 interface ApiParameters
 {
@@ -21,6 +22,7 @@ interface ApiParameters
 		amount: number;
 		app_fee?: number;
 		currency: string;
+		retry_if_possible?: boolean;
 		metadata?: Metadata;
 		links: ApiParametersLinks;
 	};
@@ -34,7 +36,7 @@ interface Result
 	payments: Payment;
 };
 
-export async function create(this: Resource, {amount, appFee, currency, metadata, mandate, options}: Parameters)
+export async function create(this: Resource, {amount, appFee, retryIfPossible, currency, metadata, mandate, options}: Parameters)
 {
 	const body: ApiParameters =
 	{
@@ -43,6 +45,7 @@ export async function create(this: Resource, {amount, appFee, currency, metadata
 			amount,
 			currency,
 			app_fee: appFee,
+			retry_if_possible: retryIfPossible,
 			metadata,
 			links:
 			{

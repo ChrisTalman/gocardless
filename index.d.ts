@@ -119,9 +119,10 @@ declare module '@chris-talman/gocardless'
 	export interface PaymentsCreateParameters <GenericMetadata extends Metadata<GenericMetadata> = {}> extends RequestOptionsWrapper
 	{
 		amount: number;
-		appFee?: number;
 		currency: Currency;
 		mandate: string;
+		appFee?: number;
+		retryIfPossible?: boolean;
 		metadata?: GenericMetadata;
 	}
 	export interface Payment <GenericMetadata extends Metadata<GenericMetadata> = {}>
@@ -285,6 +286,11 @@ declare module '@chris-talman/gocardless'
 	// Request Options
 	export interface RequestOptions
 	{
+		/**
+			Pass an idempotency key to the API.
+			If a key is not specified, one will be generated automatically and passed to the API in any case.
+		*/
+		idempotencyKey?: string;
 		useQueue?: boolean;
 	}
 	export interface RequestOptionsWrapper

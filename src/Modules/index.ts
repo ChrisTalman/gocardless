@@ -8,6 +8,11 @@ export interface Metadata
 };
 export interface RequestOptions
 {
+	/**
+		Pass an idempotency key to the API.
+		If a key is not specified, one will be generated automatically and passed to the API in any case.
+	*/
+	idempotencyKey?: string;
 	useQueue?: boolean;
 };
 export interface RequestOptionsWrapper
