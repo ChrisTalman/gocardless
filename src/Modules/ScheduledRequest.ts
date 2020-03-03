@@ -12,9 +12,6 @@ import { Client } from './Client';
 // Types
 import { RequestOptions } from 'src/Modules';
 
-// Constants
-const IDEMPOTENCY_KEY_LENGTH = 32;
-
 export class ScheduledRequest <GenericResultJson, GenericResult extends RequestResult<GenericResultJson> = RequestResult<GenericResultJson>>
 {
 	public readonly client: Client;
@@ -94,7 +91,7 @@ export class ScheduledRequest <GenericResultJson, GenericResult extends RequestR
 	{
 		if (!this.idempotencyKey)
 		{
-			this.idempotencyKey = await nanoid(IDEMPOTENCY_KEY_LENGTH);
+			this.idempotencyKey = await nanoid();
 		};
 		return this.idempotencyKey;
 	};
