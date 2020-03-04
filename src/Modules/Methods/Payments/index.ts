@@ -4,6 +4,7 @@
 import { Resource } from 'src/Modules/Resource';
 import { get } from './Get';
 import { create } from './Create';
+import { cancel } from './Cancel';
 
 // Types
 import { Currency, Metadata } from 'src/Modules/index';
@@ -24,4 +25,5 @@ export class Payments extends Resource
 {
 	public get = get;
 	public create = create;
+	public cancel = cancel;
 };

@@ -35,12 +35,14 @@ declare module '@chris-talman/gocardless'
 		reset: number;
 	}
 	type RateLimitVariant = RateLimit | undefined;
+
 	// Resource
 	class Resource
 	{
 		public readonly _client: Client;
 		constructor({client}: {client: Client});
 	}
+
 	// Creditors
 	export class Creditors extends Resource
 	{
@@ -54,6 +56,7 @@ declare module '@chris-talman/gocardless'
 		created_at: string;
 		verification_status: 'successful' | 'in_review' | 'action_required';
 	}
+
 	// Mandates
 	export class Mandates extends Resource
 	{
@@ -79,6 +82,7 @@ declare module '@chris-talman/gocardless'
 		customer_bank_account: string;
 		new_mandate?: string;
 	}
+
 	// Customer Bank Accounts
 	export class CustomerBankAccounts extends Resource
 	{
@@ -104,11 +108,13 @@ declare module '@chris-talman/gocardless'
 	{
 		customer: string;
 	}
+
 	// Payments
 	export class Payments extends Resource
 	{
 		public get <GenericMetadata extends Metadata<GenericMetadata> = {}> (parameters: PaymentsGetParameters<GenericMetadata>): Promise<Payment<GenericMetadata>>;
 		public create <GenericMetadata extends Metadata<GenericMetadata> = {}> (parameters: PaymentsCreateParameters<GenericMetadata>): Promise<Payment<GenericMetadata>>;
+		public cancel <GenericMetadata extends Metadata<GenericMetadata> = {}> (parameters: PaymentsCancelParameters<GenericMetadata>): Promise<Payment<GenericMetadata>>;
 	}
 	// Payments: Get
 	export interface PaymentsGetParameters <GenericMetadata extends Metadata<GenericMetadata> = {}> extends RequestOptionsWrapper
@@ -145,6 +151,13 @@ declare module '@chris-talman/gocardless'
 		payout?: string;
 		subscription?: string;
 	}
+	// Payments: Cancel
+	interface PaymentsCancelParameters <GenericMetadata extends Metadata<GenericMetadata> = {}> extends RequestOptionsWrapper
+	{
+		id: string;
+		metadata?: GenericMetadata;
+	}
+
 	// Redirect Flows
 	export class RedirectFlows extends Resource
 	{
@@ -188,6 +201,7 @@ declare module '@chris-talman/gocardless'
 		id: string;
 		sessionToken: string;
 	}
+
 	// Events
 	export interface EventsList
 	{
@@ -224,6 +238,7 @@ declare module '@chris-talman/gocardless'
 		refund?: string;
 		subscription?: string;
 	}
+
 	// Events: Mandate
 	export interface MandateEvent <GenericMetadata extends Metadata<GenericMetadata> = {}> extends BaseEvent <GenericMetadata>
 	{
@@ -250,6 +265,7 @@ declare module '@chris-talman/gocardless'
 			'scheme_identifier_changed'
 		;
 	}
+
 	// Events: Payment
 	export interface PaymentEvent <GenericMetadata extends Metadata<GenericMetadata> = {}> extends BaseEvent <GenericMetadata>
 	{
@@ -283,6 +299,7 @@ declare module '@chris-talman/gocardless'
 			'refund_requested'
 		;
 	}
+
 	// Request Options
 	export interface RequestOptions
 	{
@@ -297,10 +314,13 @@ declare module '@chris-talman/gocardless'
 	{
 		options?: RequestOptions;
 	}
+
 	// Currency
 	export type Currency = 'AUD' | 'CAD' | 'DKK' | 'EUR' | 'GBP' | 'NZD' | 'SEK' | 'USD';
+
 	// Metadata
 	export type Metadata <GenericMetadata> = Uniform<GenericMetadata, string>;
+
 	// API Error
 	export class ApiError extends Error
 	{
