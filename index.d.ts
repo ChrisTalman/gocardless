@@ -26,6 +26,8 @@ declare module '@chris-talman/gocardless'
 		public readonly mandates: Mandates;
 		public readonly customerBankAccounts: CustomerBankAccounts;
 		public readonly payments: Payments;
+		public readonly payouts: Payouts;
+		public readonly payoutItems: PayoutItems;
 		public readonly redirectFlows: RedirectFlows;
 	}
 	interface RateLimit
