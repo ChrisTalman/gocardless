@@ -14,6 +14,8 @@ import { Mandates } from './Methods/Mandates';
 import { CustomerBankAccounts } from './Methods/CustomerBankAccounts';
 import { Payments } from './Methods/Payments';
 import { RedirectFlows } from './Methods/RedirectFlows';
+import { Payouts } from './Methods/Payouts';
+import { PayoutItems } from './Methods/PayoutItems';
 
 // Types
 import { RequestOptions } from 'src/Modules';
@@ -208,6 +210,8 @@ export class Client
 	public mandates = new Mandates({client: this});
 	public customerBankAccounts = new CustomerBankAccounts({client: this});
 	public payments = new Payments({client: this});
+	public payouts = new Payouts({client: this});
+	public payoutItems = new PayoutItems({client: this});
 	public redirectFlows = new RedirectFlows({client: this});
 };
 

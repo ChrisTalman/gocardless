@@ -158,6 +158,99 @@ declare module '@chris-talman/gocardless'
 		metadata?: GenericMetadata;
 	}
 
+	// Payouts
+	export class Payouts extends Resource
+	{
+		public list(parameters: PayoutsListParameters): Promise<Payout>;
+	}
+	export interface Payout
+	{
+		id: string;
+		amount: number;
+		arrival_date: string;
+		created_at: string;
+		currency: string;
+		deducted_fees: number;
+		payout_type: string;
+		reference: string;
+		status: 'pending' | 'paid' | 'bounced';
+		fx: PayoutFx;
+		links: PayoutLinks;
+	}
+	export interface PayoutFx
+	{
+		estimated_exchange_rate: string;
+		exchange_rate: string;
+		fx_amount: string;
+		fx_currency: string;
+	}
+	export interface PayoutLinks
+	{
+		creditor: string;
+		creditor_bank_account: string;
+	}
+	// Payouts: List
+	export interface PayoutsListParameters extends RequestOptionsWrapper
+	{
+		after?: string;
+		before?: string;
+		createdAt?: PayoutsListParametersCreatedAt;
+		creditor?: string;
+		creditorBankAccount?: string;
+		currency?: string;
+		limit?: number;
+		payoutType?: string;
+		reference?: string;
+		status?: Payout['status'];
+	}
+	interface PayoutsListParametersCreatedAt
+	{
+		greaterThan?: string;
+		greaterThanOrEqual?: string;
+		lessThan?: string;
+		lessThanOrEqual?: string;
+	}
+
+	// Payout Items
+	export class PayoutItems extends Resource
+	{
+		public list(parameters: PayoutItemsListParameters): Promise<PayoutItemsList>;
+	}
+	export interface PayoutItem
+	{
+		amount: string;
+		type:
+			'payment_paid_out' |
+			'payment_failed' |
+			'payment_charged_back' |
+			'payment_refunded' |
+			'refund' |
+			'refund_funds_returned' |
+			'gocardless_fee' |
+			'app_fee' |
+			'revenue_share' |
+			'surcharge_fee'
+		;
+		links: PayoutItemLinks;
+	}
+	export interface PayoutItemLinks
+	{
+		payment: string;
+		mandate?: string;
+	}
+	export interface PayoutItemsList extends BaseList
+	{
+		paymout_items: Array<PayoutItem>;
+	}
+	// Payout Items: List
+	interface PayoutItemsListParameters extends RequestOptionsWrapper
+	{
+		payoutId: string;
+		after?: string;
+		before?: string;
+		limit?: number;
+	}
+
 	// Redirect Flows
 	export class RedirectFlows extends Resource
 	{
@@ -300,6 +393,20 @@ declare module '@chris-talman/gocardless'
 		;
 	}
 
+	// Events: Payout
+	export interface PayoutEvent <GenericMetadata extends Metadata<GenericMetadata> = {}> extends BaseEvent <GenericMetadata>
+	{
+		resource_type: 'payouts';
+		details: PayoutEventDetails;
+	}
+	export interface PayoutEventDetails extends EventDetails
+	{
+		cause:
+			'payout_paid' |
+			'payout_fx_rate_confirmed'
+		;
+	}
+
 	// Request Options
 	export interface RequestOptions
 	{
@@ -313,6 +420,22 @@ declare module '@chris-talman/gocardless'
 	export interface RequestOptionsWrapper
 	{
 		options?: RequestOptions;
+	}
+
+	// Lists
+	export interface BaseList
+	{
+		meta: ListMeta;
+	}
+	export interface ListMeta
+	{
+		cursors: ListMetaCursors;
+		limit: number;
+	}
+	export interface ListMetaCursors
+	{
+		before: string | null;
+		after: string | null;
 	}
 
 	// Currency
