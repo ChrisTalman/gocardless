@@ -53,10 +53,10 @@ interface ApiParametersCreatedAt
 };
 interface Result
 {
-	payouts: object;
+	payouts: Array<object>;
 };
 
-export async function list(this: Resource, {after, before, createdAt, creditor, creditorBankAccount, currency, limit, payoutType, reference, status, options}: Parameters)
+export async function list(this: Resource, {after, before, createdAt, creditor, creditorBankAccount, currency, limit, payoutType, reference, status, options}: Parameters = {})
 {
 	const body: ApiParameters =
 	{
@@ -98,6 +98,6 @@ export async function list(this: Resource, {after, before, createdAt, creditor, 
 			options
 		}
 	);
-	const { payouts: payout } = guaranteeResultJson(result);
-	return payout;
+	const { payouts } = guaranteeResultJson(result);
+	return payouts;
 };

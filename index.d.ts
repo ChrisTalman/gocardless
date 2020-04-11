@@ -50,14 +50,14 @@ declare module '@chris-talman/gocardless'
 	{
 		public list <GenericMetadata extends Metadata<GenericMetadata> = {}> (parameters?: CreditorsListParameters): Promise<Array<Creditor>>;
 	}
-	// Creditors: List
-	export interface CreditorsListParameters extends RequestOptionsWrapper {}
 	export interface Creditor
 	{
 		id: string;
 		created_at: string;
 		verification_status: 'successful' | 'in_review' | 'action_required';
 	}
+	// Creditors: List
+	export interface CreditorsListParameters extends RequestOptionsWrapper {}
 
 	// Mandates
 	export class Mandates extends Resource
@@ -163,7 +163,7 @@ declare module '@chris-talman/gocardless'
 	// Payouts
 	export class Payouts extends Resource
 	{
-		public list(parameters: PayoutsListParameters): Promise<Payout>;
+		public list(parameters?: PayoutsListParameters): Promise<Array<Payout>>;
 	}
 	export interface Payout
 	{
@@ -171,7 +171,7 @@ declare module '@chris-talman/gocardless'
 		amount: number;
 		arrival_date: string;
 		created_at: string;
-		currency: string;
+		currency: Currency;
 		deducted_fees: number;
 		payout_type: string;
 		reference: string;
@@ -199,10 +199,10 @@ declare module '@chris-talman/gocardless'
 		createdAt?: PayoutsListParametersCreatedAt;
 		creditor?: string;
 		creditorBankAccount?: string;
-		currency?: string;
+		currency?: Payout['currency'];
 		limit?: number;
-		payoutType?: string;
-		reference?: string;
+		payoutType?: Payout['payout_type'];
+		reference?: Payout['reference'];
 		status?: Payout['status'];
 	}
 	interface PayoutsListParametersCreatedAt
