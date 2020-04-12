@@ -169,7 +169,7 @@ declare module '@chris-talman/gocardless'
 	{
 		id: string;
 		amount: number;
-		arrival_date: string;
+		arrival_date: string | null;
 		created_at: string;
 		currency: Currency;
 		deducted_fees: number;
