@@ -212,6 +212,10 @@ declare module '@chris-talman/gocardless'
 		lessThan?: string;
 		lessThanOrEqual?: string;
 	}
+	export interface PayoutsList extends BaseList
+	{
+		payouts: Array<Payout>;
+	}
 
 	// Payout Items
 	export class PayoutItems extends Resource
@@ -242,7 +246,7 @@ declare module '@chris-talman/gocardless'
 	}
 	export interface PayoutItemsList extends BaseList
 	{
-		paymout_items: Array<PayoutItem>;
+		payout_items: Array<PayoutItem>;
 	}
 	// Payout Items: List
 	interface PayoutItemsListParameters extends RequestOptionsWrapper

@@ -98,6 +98,6 @@ export async function list(this: Resource, {after, before, createdAt, creditor, 
 			options
 		}
 	);
-	const { payouts } = guaranteeResultJson(result);
-	return payouts;
+	const json = guaranteeResultJson(result);
+	return json;
 };

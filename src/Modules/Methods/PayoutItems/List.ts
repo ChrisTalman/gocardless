@@ -56,6 +56,6 @@ export async function list(this: Resource, {after, before, payoutId, limit, opti
 			options
 		}
 	);
-	const { payout_items: payoutItems } = guaranteeResultJson(result);
-	return payoutItems;
+	const json = guaranteeResultJson(result);
+	return json;
 };
