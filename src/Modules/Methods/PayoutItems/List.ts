@@ -44,7 +44,7 @@ export async function list(this: Resource, {after, before, payoutId, limit, opti
 			request:
 			{
 				method: 'GET',
-				path: `/payout_items/${queryParameters}`,
+				path: `/payout_items?${queryParameters}`,
 				jsonResponseSuccess: true,
 				jsonResponseError: true
 			},

@@ -86,7 +86,7 @@ export async function list(this: Resource, {after, before, createdAt, creditor, 
 			request:
 			{
 				method: 'GET',
-				path: `/payouts/?${queryParameters}`,
+				path: `/payouts?${queryParameters}`,
 				jsonResponseSuccess: true,
 				jsonResponseError: true
 			},
