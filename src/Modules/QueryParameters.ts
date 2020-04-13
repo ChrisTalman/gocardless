@@ -22,12 +22,18 @@ export function generateQueryParameters(object: object)
 			for (let path of paths)
 			{
 				const pathKey = `${key}${path.string}`;
-				queryParameters.set(pathKey, path.value);
+				if (path.value !== undefined)
+				{
+					queryParameters.set(pathKey, path.value);
+				};
 			};
 		}
 		else
 		{
-			queryParameters.set(key, value);
+			if (value !== undefined)
+			{
+				queryParameters.set(key, value);
+			};
 		};
 	};
 	const queryParametersString = queryParameters.toString();
@@ -53,15 +59,12 @@ function resolveChildPaths(object: object)
 		}
 		else
 		{
-			if (value !== undefined)
+			const path: Path =
 			{
-				const path: Path =
-				{
-					string: `[${key}]`,
-					value: value
-				};
-				paths.push(path);
+				string: `[${key}]`,
+				value: value
 			};
+			paths.push(path);
 		};
 	};
 	return paths;
