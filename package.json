@@ -1,7 +1,7 @@
 {
 	"name": "@chris-talman/gocardless",
 	"description": "Methods to access the GoCardless API",
-	"version": "5.0.3",
+	"version": "5.0.4",
 	"devDependencies": {
 		"@types/nanoid": "2.1.0",
 		"@types/node": "12.11.1",

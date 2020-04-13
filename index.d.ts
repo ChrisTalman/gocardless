@@ -163,7 +163,7 @@ declare module '@chris-talman/gocardless'
 	// Payouts
 	export class Payouts extends Resource
 	{
-		public list(parameters?: PayoutsListParameters): Promise<Array<Payout>>;
+		public list(parameters?: PayoutsListParameters): Promise<PayoutsList>;
 	}
 	export interface Payout
 	{
