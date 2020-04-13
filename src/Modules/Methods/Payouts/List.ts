@@ -5,6 +5,7 @@ import { guaranteeResultJson } from '@chris-talman/request';
 
 // Internal Modules
 import { Resource } from 'src/Modules/Resource';
+import { generateQueryParameters } from 'src/Modules/QueryParameters';
 
 // Types
 import { RequestOptionsWrapper } from 'src/Modules';
@@ -30,19 +31,16 @@ interface ParametersCreatedAt
 };
 interface ApiParameters
 {
-	payouts:
-	{
-		after?: string;
-		before?: string;
-		created_at?: ApiParametersCreatedAt;
-		creditor?: string;
-		creditor_bank_account?: string;
-		currency?: string;
-		limit?: number;
-		payout_type?: string;
-		reference?: string;
-		status?: 'pending' | 'paid' | 'bounced';
-	};
+	after?: string;
+	before?: string;
+	created_at?: ApiParametersCreatedAt;
+	creditor?: string;
+	creditor_bank_account?: string;
+	currency?: string;
+	limit?: number;
+	payout_type?: string;
+	reference?: string;
+	status?: 'pending' | 'paid' | 'bounced';
 };
 interface ApiParametersCreatedAt
 {
@@ -60,38 +58,35 @@ export async function list(this: Resource, {after, before, createdAt, creditor, 
 {
 	const body: ApiParameters =
 	{
-		payouts:
-		{
-			after,
-			before,
-			created_at:
-				createdAt
-				?
-					{
-						gt: createdAt.greaterThan,
-						gte: createdAt.greaterThanOrEqual,
-						lt: createdAt.lessThan,
-						lte: createdAt.lessThanOrEqual
-					}
-				:
-				undefined,
-			creditor,
-			creditor_bank_account: creditorBankAccount,
-			currency,
-			limit,
-			payout_type: payoutType,
-			reference,
-			status
-		}
+		after,
+		before,
+		created_at:
+			createdAt
+			?
+				{
+					gt: createdAt.greaterThan,
+					gte: createdAt.greaterThanOrEqual,
+					lt: createdAt.lessThan,
+					lte: createdAt.lessThanOrEqual
+				}
+			:
+			undefined,
+		creditor,
+		creditor_bank_account: creditorBankAccount,
+		currency,
+		limit,
+		payout_type: payoutType,
+		reference,
+		status
 	};
+	const queryParameters = generateQueryParameters(body);
 	const result = await this._client.scheduleApiRequest <Result>
 	(
 		{
 			request:
 			{
 				method: 'GET',
-				path: '/payouts/',
-				body,
+				path: `/payouts/?${queryParameters}`,
 				jsonResponseSuccess: true,
 				jsonResponseError: true
 			},

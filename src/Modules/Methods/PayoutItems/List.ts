@@ -5,6 +5,7 @@ import { guaranteeResultJson } from '@chris-talman/request';
 
 // Internal Modules
 import { Resource } from 'src/Modules/Resource';
+import { generateQueryParameters } from 'src/Modules/QueryParameters';
 
 // Types
 import { RequestOptionsWrapper } from 'src/Modules';
@@ -17,13 +18,10 @@ interface Parameters extends RequestOptionsWrapper
 };
 interface ApiParameters
 {
-	payout_items:
-	{
-		payout: string;
-		after?: string;
-		before?: string;
-		limit?: number;
-	};
+	payout: string;
+	after?: string;
+	before?: string;
+	limit?: number;
 };
 interface Result
 {
@@ -34,22 +32,19 @@ export async function list(this: Resource, {after, before, payoutId, limit, opti
 {
 	const body: ApiParameters =
 	{
-		payout_items:
-		{
-			payout: payoutId,
-			after,
-			before,
-			limit
-		}
+		payout: payoutId,
+		after,
+		before,
+		limit
 	};
+	const queryParameters = generateQueryParameters(body);
 	const result = await this._client.scheduleApiRequest <Result>
 	(
 		{
 			request:
 			{
 				method: 'GET',
-				path: '/payout_items/',
-				body,
+				path: `/payout_items/${queryParameters}`,
 				jsonResponseSuccess: true,
 				jsonResponseError: true
 			},
