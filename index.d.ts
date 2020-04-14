@@ -307,7 +307,7 @@ declare module '@chris-talman/gocardless'
 		events: Events;
 	}
 	export interface Events extends Array<Event> {}
-	export type Event = MandateEvent | PaymentEvent;
+	export type Event = MandateEvent | PaymentEvent | PayoutEvent;
 	export interface BaseEvent <GenericMetadata extends Metadata<GenericMetadata> = {}>
 	{
 		id: string;
