@@ -163,6 +163,7 @@ declare module '@chris-talman/gocardless'
 	// Payouts
 	export class Payouts extends Resource
 	{
+		public get(parameters: PayoutsGetParameters): Promise<Payout>;
 		public list(parameters?: PayoutsListParameters): Promise<PayoutsList>;
 	}
 	export interface Payout
@@ -190,6 +191,11 @@ declare module '@chris-talman/gocardless'
 	{
 		creditor: string;
 		creditor_bank_account: string;
+	}
+	// Mandates: Get
+	export interface PayoutsGetParameters extends RequestOptionsWrapper
+	{
+		id: string;
 	}
 	// Payouts: List
 	export interface PayoutsListParameters extends RequestOptionsWrapper
