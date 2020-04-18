@@ -358,6 +358,7 @@ declare module '@chris-talman/gocardless'
 			'customer_approval_skipped' |
 			'mandate_submitted' |
 			'mandate_activated' |
+			'mandate_replaced' |
 			'mandate_cancelled' |
 			'mandate_expired' |
 			'resubmission_requested' |
