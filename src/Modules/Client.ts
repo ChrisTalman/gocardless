@@ -152,6 +152,7 @@ export class Client
 	private async timeoutQueueItem <GenericScheduledRequest extends ScheduledRequest<any>> (item: GenericScheduledRequest)
 	{
 		await delay(this.queueItemTimeoutMilliseconds);
+		this.removeQueueItem(item);
 		const timeoutError = new QueueTimeoutError();
 		item.promiseController.reject(timeoutError);
 	};
